@@ -5,7 +5,8 @@ from rest_framework import routers
 from core import views as core_views
 
 router = routers.SimpleRouter()
-router.register(r'api-core', core_views.ItemAPIView, base_name="api-core")
+router.register(r'api-item', core_views.ItemAPIView, base_name="api-item")
+router.register(r'api-image', core_views.ImageAPIView, base_name="api-image")
 
 
 urlpatterns = [

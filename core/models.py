@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 from django.utils import timezone
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
+from versatileimagefield.fields import VersatileImageField, PPOIField
+from django.core.files.storage import FileSystemStorage
 
 
 class Item(models.Model):
@@ -16,12 +17,18 @@ class Item(models.Model):
 
 
 class Image(models.Model):
-    image = models.CharField(max_length=256, blank=False)
-    created_at = models.DateTimeField(db_index=True,
-                                      default=timezone.now, blank=True)
-    post = models.ForeignKey(Item,
+    item = models.ForeignKey(Item,
                              on_delete=models.CASCADE,
                              related_name='images')
+    itemshot = VersatileImageField('Item',
+                                   blank=True,
+                                   null=True,
+                                   upload_to='items/',
+                                   ppoi_field='item_ppoi'
+    )
+    item_ppoi = PPOIField()
+    created_at = models.DateTimeField(db_index=True,
+                                      default=timezone.now, blank=True)
 
     def __unicode__(self):
-        return u'%s %s' % (self.image, self.post.subject)
+        return u'%s %s' % (self.id, self.itemshot)
