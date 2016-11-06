@@ -133,7 +133,8 @@ MEDIA_URL = '/media/'
 
 # STORAGE
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-AWS_STORAGE_BUCKET_NAME = 'saveworld-dev2'
+AWS_STORAGE_BUCKET_NAME = 'saveworld-dev-seoul'
+AWS_S3_HOST = 's3.ap-northeast-2.amazonaws.com'
 
 try:
     from settings_local import *

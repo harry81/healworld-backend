@@ -29,11 +29,12 @@ class ImageAPIView(viewsets.ModelViewSet):
     def put(self, request, format=None):
         file_obj = request.data['file']
         item_id = request.POST.get('item_id')
+
         image = Image.objects.create(item_id=item_id, itemshot=file_obj)
 
         data = {
             "item_id": item_id,
             "image_id": image.id
         }
-        print data
+
         return Response(status=201, data=data)

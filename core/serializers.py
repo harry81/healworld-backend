@@ -5,10 +5,10 @@ from versatileimagefield.serializers import VersatileImageFieldSerializer
 class ImageSerializer(serializers.ModelSerializer):
     itemshot = VersatileImageFieldSerializer(
         sizes=[
-            # ('full_size', 'url'),
+            ('full_size', 'url'),
             ('thumbnail', 'thumbnail__100x100'),
-            # ('medium_square_crop', 'crop__400x400'),
-            # ('small_square_crop', 'crop__50x50')
+            ('medium_square_crop', 'crop__400x400'),
+            ('small_square_crop', 'crop__50x50')
         ]
     )
 

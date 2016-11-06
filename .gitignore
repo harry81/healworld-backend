@@ -90,3 +90,4 @@ ENV/
 .ropeproject
 
 db.sqlite3
+main/settings_local.py
