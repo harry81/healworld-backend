@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from core.models import Item, Image
 from versatileimagefield.serializers import VersatileImageFieldSerializer
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
+
 
 class ImageSerializer(serializers.ModelSerializer):
     itemshot = VersatileImageFieldSerializer(
@@ -16,9 +18,11 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = ('item', 'itemshot')
 
-class ItemSerializer(serializers.ModelSerializer):
+class ItemSerializer(GeoFeatureModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Item
+        geo_field = "point"
+
         fields = ('text', 'user', 'created_at', 'images')

@@ -4,7 +4,9 @@ from rest_framework import filters
 from core.serializers import ItemSerializer, ImageSerializer
 from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
+from rest_framework_gis.filters import DistanceToPointFilter
 from core.models import Item, Image
+from rest_framework import generics
 
 
 class ItemPagination(PageNumberPagination):
@@ -13,8 +15,12 @@ class ItemPagination(PageNumberPagination):
 
 class ItemAPIView(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
-    filter_backends = (filters.SearchFilter,)
     pagination_class = ItemPagination
+    filter_backends = (filters.SearchFilter,)
+
+    distance_filter_field = 'point'
+    filter_backends = (DistanceToPointFilter, )
+    bbox_filter_include_overlapping = True # Optional
 
     def get_queryset(self):
         return Item.objects.order_by('-created_at')
@@ -24,11 +30,11 @@ class ImageAPIView(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
 
     def get_queryset(self):
-        return Image.objects.order_by('-created_at')
+        return self.get_queryset.order_by('-created_at')
 
     def put(self, request, format=None):
         file_obj = request.data['file']
-        item_id = request.POST.get('item_id')
+        item_id = request.data.get('item_id')
 
         image = Image.objects.create(item_id=item_id, itemshot=file_obj)
 
