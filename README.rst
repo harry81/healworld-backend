@@ -8,16 +8,23 @@
 
    curl -X PUT -F "file=@/home/harry/Pictures/Selection_005.png" -F "item_id=1" http://localhost:8000/api-image/ -H "Content-Type: multipart/form-data"
 
-   curl http://localhost:8000/api-item/\?dist\=400\&point\=-52.507629,13.1459654\&format\=json -i
+- api call with geometry params
 
-=======
- Refer
-=======
+.. code:: python
+
+   curl http://localhost:8000/api-item/?dist=400&point=-52.507629,13.1459654&format=json -i
+
+=========
+Reference
+=========
 - http://ngee.tistory.com/965
 
 =================
  Troubleshooting
 =================
+
+- S3ResponseError: S3ResponseError: 400 Bad Request
+
 .. code:: bash
 
           File "/home/harry/.virt_env/saveworld/local/lib/python2.7/site-packages/boto/s3/bucket.py", line 193, in get_key
@@ -32,9 +39,19 @@
    AWS_S3_HOST = 's3.ap-northeast-2.amazonaws.com'
 
 
+- gis/openlayers.html
+
 .. code:: bash
 
    File "/home/harry/.virt_env/saveworld/local/lib/python2.7/site-packages/django/template/loader.py", line 25, in get_template
           raise TemplateDoesNotExist(template_name, chain=chain)
  TemplateDoesNotExist: gis/openlayers.html
  [08/Nov/2016 08:49:16] "GET /admin/core/item/1/change/ HTTP/1.1" 500 450073
+
+.. code:: python
+
+   INSTALLED_APPS = [
+   ...
+   'rest_framework_gis',
+   ...
+   ]
