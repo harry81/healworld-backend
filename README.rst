@@ -55,3 +55,7 @@ Reference
    'rest_framework_gis',
    ...
    ]
+
+- Yum does not have libjpeg-devel-6b available for installation
+
+https://www.cocept.io/blog/development/using-pillow-on-amazon-elastic-beanstalk/
