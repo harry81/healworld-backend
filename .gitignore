@@ -92,3 +92,8 @@ ENV/
 db.sqlite3
 main/settings_local.py
 /README.html
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
