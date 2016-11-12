@@ -72,3 +72,6 @@ https://www.cocept.io/blog/development/using-pillow-on-amazon-elastic-beanstalk/
         WSGIPath: main/wsgi.py
       aws:elasticbeanstalk:container:python:staticfiles:
         "/static/": "static/"
+- No 'Access-Control-Allow-Origin' header is present on the requested resource
+
+https://github.com/ottoyiu/django-cors-headers

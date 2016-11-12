@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'versatileimagefield',
     'storages',
+    'corsheaders',
     'core'
 ]
 
@@ -55,6 +56,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -138,6 +141,13 @@ MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_STORAGE_BUCKET_NAME = 'saveworld-dev-seoul'
 AWS_S3_HOST = 's3.ap-northeast-2.amazonaws.com'
+
+
+CORS_ORIGIN_WHITELIST = (
+    'saveworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
+    'localhost:8100',
+    '127.0.0.1:8100'
+)
 
 try:
     from settings_local import *
