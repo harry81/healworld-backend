@@ -59,3 +59,16 @@ Reference
 - Yum does not have libjpeg-devel-6b available for installation
 
 https://www.cocept.io/blog/development/using-pillow-on-amazon-elastic-beanstalk/
+
+- Django static files not working on elastic beanstalk
+
+.. code:: python
+
+    option_settings:
+      aws:elasticbeanstalk:application:environment:
+        DJANGO_SETTINGS_MODULE: "main.settings"
+        PYTHONPATH: "/opt/python/current/app/main:$PYTHONPATH"
+      aws:elasticbeanstalk:container:python:
+        WSGIPath: main/wsgi.py
+      aws:elasticbeanstalk:container:python:staticfiles:
+        "/static/": "static/"

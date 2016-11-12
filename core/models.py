@@ -9,8 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class Item(models.Model):
-    text = models.TextField()
+    memo = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=None, null=True)
+    price = models.IntegerField(default=1000)
     point = models.PointField(verbose_name=_("Item location"),
                               blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
