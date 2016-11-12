@@ -23,6 +23,15 @@ Reference
  Troubleshooting
 =================
 
+- S3ResponseError: 403 Forbidden
+
+.. code:: bash
+
+   Web configuration in Elastic Beanstalk
+
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+
 - S3ResponseError: S3ResponseError: 400 Bad Request
 
 .. code:: bash

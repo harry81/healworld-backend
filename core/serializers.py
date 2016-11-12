@@ -8,9 +8,9 @@ class ImageSerializer(serializers.ModelSerializer):
     itemshot = VersatileImageFieldSerializer(
         sizes=[
             ('full_size', 'url'),
-            ('thumbnail', 'thumbnail__100x100'),
-            ('medium_square_crop', 'crop__400x400'),
-            ('small_square_crop', 'crop__50x50')
+            ('thumbnail__100x100', 'thumbnail__100x100'),
+            ('thumbnail__300x200', 'thumbnail__300x200'),
+            ('thumbnail__400x400', 'thumbnail__400x400'),
         ]
     )
 
