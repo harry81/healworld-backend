@@ -16,7 +16,8 @@ class ImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ('item', 'itemshot')
+        fields = ('id', 'item', 'itemshot')
+
 
 class ItemSerializer(GeoFeatureModelSerializer):
     images = ImageSerializer(many=True, read_only=True)

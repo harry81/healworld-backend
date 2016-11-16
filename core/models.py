@@ -23,6 +23,7 @@ class Item(models.Model):
 class Image(models.Model):
     item = models.ForeignKey(Item,
                              on_delete=models.CASCADE,
+                             null=True,
                              related_name='images')
     itemshot = VersatileImageField('Item',
                                    blank=True,
