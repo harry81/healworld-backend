@@ -22,12 +22,13 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class ItemSerializer(GeoFeatureModelSerializer):
     image_ids = serializers.CharField(max_length=200, write_only=True)
+    images = ImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Item
         geo_field = "point"
 
-        fields = ('memo', 'user', 'created_at', 'image_ids')
+        fields = ('memo', 'user', 'created_at', 'images', 'image_ids')
 
     def create(self, validated_data):
         image_ids = validated_data.pop('image_ids')

@@ -10,8 +10,7 @@ from rest_framework import generics
 
 
 class ItemPagination(PageNumberPagination):
-    page_size = 5
-
+    page_size = 20
 
 class ItemAPIView(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
