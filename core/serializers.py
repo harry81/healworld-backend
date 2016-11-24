@@ -1,8 +1,22 @@
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist
-from core.models import Item, Image
+# from django.contrib.auth.models import User
+from core.models import User, Item, Image
 from versatileimagefield.serializers import VersatileImageFieldSerializer
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('pk', 'username', 'profile_picture' )
+
+
+# class UserSerializer(serializers.ModelSerializer):
+#     user = UserSerializer(read_only=True)
+
+#     class Meta:
+#         model = User
+#         fields = ('pk', 'user', )
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -23,12 +37,14 @@ class ImageSerializer(serializers.ModelSerializer):
 class ItemSerializer(GeoFeatureModelSerializer):
     image_ids = serializers.CharField(max_length=200, write_only=True)
     images = ImageSerializer(many=True, read_only=True)
+    user_id = serializers.CharField(max_length=20, write_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Item
         geo_field = "point"
 
-        fields = ('memo', 'user', 'created_at', 'images', 'image_ids')
+        fields = ('memo','created_at', 'images', 'image_ids', 'user_id', 'user')
 
     def create(self, validated_data):
         image_ids = validated_data.pop('image_ids')

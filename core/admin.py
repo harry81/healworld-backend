@@ -1,6 +1,10 @@
 from django.contrib import admin
-from core.models import Item, Image
+from core.models import User, Item, Image
 
+class UserAdmin(admin.ModelAdmin):
+    model = User
+
+admin.site.register(User, UserAdmin)
 
 class ImageInline(admin.TabularInline):
     model = Image
