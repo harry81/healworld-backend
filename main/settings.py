@@ -90,7 +90,7 @@ DATABASES = {
         'NAME': 'db_saveworld',
         'USER': 'saveworld',
         'PASSWORD': 'pw-saveworld',
-        'HOST': 'db-saveworld2-dev.cqzylqmcjdma.ap-northeast-2.rds.amazonaws.com',
+        'HOST': 'db-saveworld-dev.cqzylqmcjdma.ap-northeast-2.rds.amazonaws.com',
         'PORT': '',    }
 }
 
@@ -127,6 +127,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+AUTH_USER_MODEL = 'core.User'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
