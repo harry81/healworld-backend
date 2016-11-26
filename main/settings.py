@@ -87,13 +87,12 @@ WSGI_APPLICATION = 'main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'db_saveworld',
-        'USER': 'saveworld',
-        'PASSWORD': 'pw-saveworld',
-        'HOST': 'db-saveworld-dev.cqzylqmcjdma.ap-northeast-2.rds.amazonaws.com',
-        'PORT': '',    }
+        'NAME': 'db_healworld',
+        'USER': 'healworld',
+        'PASSWORD': 'pw-healworld',
+        'HOST': 'healworldinstance.cqzylqmcjdma.ap-northeast-2.rds.amazonaws.com',
+        'PORT': '5432',    }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -141,13 +140,16 @@ MEDIA_URL = '/media/'
 
 # STORAGE
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-AWS_STORAGE_BUCKET_NAME = 'saveworld-dev-seoul'
+AWS_STORAGE_BUCKET_NAME = 'healworld-dev-seoul'
 AWS_S3_HOST = 's3.ap-northeast-2.amazonaws.com'
 
 
 CORS_ORIGIN_WHITELIST = (
-    'saveworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
+    'healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
+    'healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
+    'healworld.co.kr',
     'localhost:8100',
+    'healworld:8100',
     '127.0.0.1:8100'
 )
 

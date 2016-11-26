@@ -11,14 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('pk', 'username', 'profile_picture' )
 
 
-# class UserSerializer(serializers.ModelSerializer):
-#     user = UserSerializer(read_only=True)
-
-#     class Meta:
-#         model = User
-#         fields = ('pk', 'user', )
-
-
 class ImageSerializer(serializers.ModelSerializer):
     itemshot = VersatileImageFieldSerializer(
         sizes=[
@@ -44,7 +36,7 @@ class ItemSerializer(GeoFeatureModelSerializer):
         model = Item
         geo_field = "point"
 
-        fields = ('memo','created_at', 'images', 'image_ids', 'user_id', 'user')
+        fields = ('memo','created_at', 'images', 'image_ids', 'user_id', 'user', 'price', 'address')
 
     def create(self, validated_data):
         image_ids = validated_data.pop('image_ids')

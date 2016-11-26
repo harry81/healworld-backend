@@ -84,3 +84,8 @@ https://www.cocept.io/blog/development/using-pillow-on-amazon-elastic-beanstalk/
 - No 'Access-Control-Allow-Origin' header is present on the requested resource
 
 https://github.com/ottoyiu/django-cors-headers
+
+
+
+
+- new bucket, www.healworld.co.kr
