@@ -28,6 +28,7 @@ class Item(models.Model):
     point = models.PointField(verbose_name=_("Item location"),
                               blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    address = models.CharField(max_length=256, blank=True, null=True)
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.memo)
