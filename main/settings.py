@@ -145,9 +145,10 @@ AWS_S3_HOST = 's3.ap-northeast-2.amazonaws.com'
 
 
 CORS_ORIGIN_WHITELIST = (
-    'healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
+    'healworld-backend.gm347t2p7n.ap-northeast-2.elasticbeanstalk.com',
     'healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
     'healworld.co.kr',
+    'www.healworld.co.kr',
     'localhost:8100',
     'healworld:8100',
     '127.0.0.1:8100'
