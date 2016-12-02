@@ -12,7 +12,16 @@ class ImageInline(admin.TabularInline):
 
 class ItemAdmin(admin.ModelAdmin):
     inlines = (ImageInline, )
-    pass
+    list_display = ( "image_tag", "user", "memo", "address", "created_at")
+
+    def image_tag(self, instance):
+        image = instance.images.all()[0]
+        thumbnail = image.itemshot.thumbnail['50x50']
+        url = "<img src=%s>" % thumbnail
+        return url
+
+    image_tag.short_description = 'Image'
+    image_tag.allow_tags = True
 
 admin.site.register(Item, ItemAdmin)
 
