@@ -6,6 +6,12 @@ from versatileimagefield.serializers import VersatileImageFieldSerializer
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 class UserSerializer(serializers.ModelSerializer):
+    profile_picture = VersatileImageFieldSerializer(
+        sizes=[
+            ('thumbnail__50x50', 'thumbnail__50x50'),
+        ]
+    )
+
     class Meta:
         model = User
         fields = ('pk', 'username', 'profile_picture' )
