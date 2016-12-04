@@ -15,10 +15,13 @@ class ItemAdmin(admin.ModelAdmin):
     list_display = ( "image_tag", "user", "memo", "address", "created_at")
 
     def image_tag(self, instance):
-        image = instance.images.all()[0]
-        thumbnail = image.itemshot.thumbnail['50x50']
-        url = "<img src=%s>" % thumbnail
-        return url
+        try:
+            image = instance.images.all()[0]
+            thumbnail = image.itemshot.thumbnail['50x50']
+            url = "<img src=%s>" % thumbnail
+            return url
+        except IndexError:
+            return ''
 
     image_tag.short_description = 'Image'
     image_tag.allow_tags = True
