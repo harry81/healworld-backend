@@ -7,7 +7,6 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework_gis.filters import DistanceToPointFilter
 from core.models import Item, Image
 from rest_framework import generics
-from django.http import HttpResponse
 
 
 class ItemPagination(PageNumberPagination):
@@ -31,8 +30,3 @@ class ImageAPIView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.get_queryset.order_by('-created_at')
-
-
-def get_host(request):
-    output = request.build_absolute_uri()
-    return HttpResponse(output)

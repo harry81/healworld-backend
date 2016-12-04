@@ -12,5 +12,4 @@ router.register(r'api-image', core_views.ImageAPIView, base_name="api-image")
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
-    url(r'^get_host$', core_views.get_host, name='get_host'),
 ]
