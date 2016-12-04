@@ -15,11 +15,12 @@ class ItemPagination(PageNumberPagination):
 class ItemAPIView(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     pagination_class = ItemPagination
-    filter_backends = (filters.SearchFilter,)
 
     distance_filter_field = 'point'
-    filter_backends = (DistanceToPointFilter, )
+    filter_backends = (DistanceToPointFilter, filters.SearchFilter)
     bbox_filter_include_overlapping = True # Optional
+    search_fields = ('memo', )
+
 
     def get_queryset(self):
         return Item.objects.order_by('-created_at')
