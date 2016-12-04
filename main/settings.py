@@ -143,6 +143,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_STORAGE_BUCKET_NAME = 'healworld-dev-seoul'
 AWS_S3_HOST = 's3.ap-northeast-2.amazonaws.com'
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CORS_ORIGIN_WHITELIST = (
     'healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
