@@ -1,7 +1,8 @@
+from django_comments.models import Comment
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import filters
-from core.serializers import ItemSerializer, ImageSerializer
+from core.serializers import ItemSerializer, ImageSerializer, CommentSerializer
 from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
 from rest_framework_gis.filters import DistanceToPointFilter
@@ -21,7 +22,6 @@ class ItemAPIView(viewsets.ModelViewSet):
     bbox_filter_include_overlapping = True # Optional
     search_fields = ('memo', )
 
-
     def get_queryset(self):
         return Item.objects.order_by('-created_at')
 
@@ -31,3 +31,10 @@ class ImageAPIView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.get_queryset.order_by('-created_at')
+
+
+class CommentAPIView(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        return Comment.objects.all()

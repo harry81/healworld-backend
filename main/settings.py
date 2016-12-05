@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django_comments',
     'django_extensions',
     'django.contrib.gis',
     'rest_framework',
@@ -126,7 +128,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+SITE_ID = 1
 AUTH_USER_MODEL = 'core.User'
 
 # Static files (CSS, JavaScript, Images)

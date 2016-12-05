@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist
-# from django.contrib.auth.models import User
+from django_comments.models import Comment
 from core.models import User, Item, Image
 from versatileimagefield.serializers import VersatileImageFieldSerializer
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
@@ -57,3 +57,8 @@ class ItemSerializer(GeoFeatureModelSerializer):
                 pass
 
         return item
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
