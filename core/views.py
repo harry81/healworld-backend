@@ -1,4 +1,4 @@
-from django_comments.models import Comment
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import filters
@@ -8,6 +8,7 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework_gis.filters import DistanceToPointFilter
 from core.models import Item, Image
 from rest_framework import generics
+from django_comments.models import Comment
 
 
 class ItemPagination(PageNumberPagination):
@@ -34,7 +35,7 @@ class ImageAPIView(viewsets.ModelViewSet):
 
 
 class CommentAPIView(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-
-    def get_queryset(self):
-        return Comment.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('object_pk', )
