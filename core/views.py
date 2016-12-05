@@ -37,5 +37,6 @@ class ImageAPIView(viewsets.ModelViewSet):
 class CommentAPIView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('object_pk', )
+    ordering = ('-submit_date',)
