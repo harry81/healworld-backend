@@ -37,12 +37,17 @@ class ItemSerializer(GeoFeatureModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
     user_id = serializers.CharField(max_length=20, write_only=True)
     user = UserSerializer(read_only=True)
+    cnt_of_comments = serializers.SerializerMethodField()
+
+    def get_cnt_of_comments(self, obj):
+        # TODO use calculated values instead of constant
+        return Comment.objects.filter(object_pk=obj.id, content_type=8, site_id=1).count()
 
     class Meta:
         model = Item
         geo_field = "point"
 
-        fields = ('pk', 'memo','created_at', 'images', 'image_ids', 'user_id', 'user', 'price', 'address', 'created_at')
+        fields = ('pk', 'memo','created_at', 'images', 'image_ids', 'user_id', 'user', 'price', 'address', 'created_at', 'cnt_of_comments')
 
     def create(self, validated_data):
         image_ids = validated_data.pop('image_ids')
