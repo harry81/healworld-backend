@@ -12,7 +12,7 @@ from django_comments.models import Comment
 
 
 class ItemPagination(PageNumberPagination):
-    page_size = 20
+    page_size = 10
 
 class ItemAPIView(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
