@@ -21,6 +21,7 @@ class ItemAPIView(viewsets.ModelViewSet):
     distance_filter_field = 'point'
     filter_backends = (DistanceToPointFilter, filters.SearchFilter)
     bbox_filter_include_overlapping = True # Optional
+    distance_filter_convert_meters = True
     search_fields = ('memo', )
 
     def get_queryset(self):
