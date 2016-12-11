@@ -65,7 +65,8 @@ MIDDLEWARE_CLASSES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.facebook.Facebook2OAuth2',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.naver.NaverOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
