@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'versatileimagefield',
     'storages',
     'corsheaders',
+    'social.apps.django_app.default',
     'core'
 ]
 
@@ -63,6 +64,19 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.Facebook2OAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+  'fields': 'id, name, email, age_range'
+}
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
 ROOT_URLCONF = 'main.urls'
 
 TEMPLATES = [
@@ -76,6 +90,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },

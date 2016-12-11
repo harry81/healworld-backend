@@ -13,5 +13,6 @@ router.register(r'api-comment', core_views.CommentAPIView, base_name="api-commen
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
+    url(r'', include('social.apps.django_app.urls', namespace='social')),
     url(r'^comments/', include('django_comments.urls')),
 ]
