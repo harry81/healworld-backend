@@ -15,9 +15,9 @@ def info(request):
     from django.conf import settings
 
     info = JsonResponse({
-        'AWS_ACCESS_KEY_ID': settings.AWS_ACCESS_KEY_ID,
         'SOCIAL_AUTH_FACEBOOK_KEY': settings.SOCIAL_AUTH_FACEBOOK_KEY,
         'SOCIAL_AUTH_NAVER_KEY': settings.SOCIAL_AUTH_NAVER_KEY,
+        'request.user': request.user.username
     })
 
     return info
