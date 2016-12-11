@@ -13,14 +13,14 @@ from django_comments.models import Comment
 def info(request):
     from django.http import JsonResponse
     from django.conf import settings
+    from django.shortcuts import redirect
 
     info = JsonResponse({
         'SOCIAL_AUTH_FACEBOOK_KEY': settings.SOCIAL_AUTH_FACEBOOK_KEY,
         'SOCIAL_AUTH_NAVER_KEY': settings.SOCIAL_AUTH_NAVER_KEY,
         'request.user': request.user.username
     })
-
-    return info
+    return redirect('https://www.healworld.co.kr/')
 
 
 class ItemPagination(PageNumberPagination):
