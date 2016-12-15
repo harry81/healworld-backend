@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'versatileimagefield',
     'storages',
     'corsheaders',
+    'oauth2_provider',
     'social.apps.django_app.default',
+    'rest_framework_social_oauth2',
     'core'
 ]
 
@@ -67,6 +69,7 @@ MIDDLEWARE_CLASSES = [
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.naver.NaverOAuth2',
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -179,6 +182,13 @@ CORS_ORIGIN_WHITELIST = (
     'healworld:8100',
     '127.0.0.1:8100'
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    ),
+}
 
 try:
     from settings_local import *

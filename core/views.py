@@ -26,6 +26,7 @@ def info(request):
 class ItemPagination(PageNumberPagination):
     page_size = 10
 
+
 class ItemAPIView(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     pagination_class = ItemPagination

@@ -15,11 +15,14 @@ cement==2.8.2
 colorama==0.3.7
 configparser==3.5.0
 decorator==4.0.10
+django-braces==1.10.0
 django-contrib-comments==1.7.3
 django-cors-headers==1.3.1
 django-extensions==1.7.4
 django-filter==0.15.3
 django-filters==0.2.1
+django-oauth-toolkit==0.11.0
+django-rest-framework-social-oauth2==1.0.4
 django-storages==1.5.1
 django-versatileimagefield==1.6
 djangorestframework==3.4.0
@@ -37,7 +40,7 @@ ipython==5.1.0
 ipython-genutils==0.1.0
 jmespath==0.9.0
 mccabe==0.5.2
-oauthlib==2.0.1
+oauthlib==1.1.2
 pathlib2==2.1.0
 pathspec==0.3.4
 pbr==1.10.0
