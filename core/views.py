@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
@@ -9,15 +10,31 @@ from rest_framework_gis.filters import DistanceToPointFilter
 from core.models import Item, Image
 from rest_framework import generics
 from django_comments.models import Comment
+from rest_framework_jwt.settings import api_settings
 
-def info(request):
-    from django.http import JsonResponse
-    from django.conf import settings
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+
+def get_token(request):
+    user = request.user
+
+    try:
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
+
+    except AttributeError:
+        token = None
+
+    try:
+        provider = user.social_auth.all()[0].provider
+    except:
+        provider = None
 
     info = JsonResponse({
-        'SOCIAL_AUTH_FACEBOOK_KEY': settings.SOCIAL_AUTH_FACEBOOK_KEY,
-        'SOCIAL_AUTH_NAVER_KEY': settings.SOCIAL_AUTH_NAVER_KEY,
-        'request.user': request.user.username
+        'username': user.username,
+        'token': token,
+        'usersocialauth': provider,
     })
 
     return info
