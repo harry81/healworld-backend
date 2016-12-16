@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'versatileimagefield',
     'storages',
     'corsheaders',
+    'oauth2_provider',
     'social.apps.django_app.default',
+    'rest_framework_social_oauth2',
     'core'
 ]
 
@@ -67,6 +69,7 @@ MIDDLEWARE_CLASSES = [
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.naver.NaverOAuth2',
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -75,7 +78,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
   'fields': 'id, name, email, age_range'
 }
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/info'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/social_complete/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY')
@@ -179,6 +182,17 @@ CORS_ORIGIN_WHITELIST = (
     'healworld:8100',
     '127.0.0.1:8100'
 )
+
+REST_FRAMEWORK = {
+     'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+}
 
 try:
     from settings_local import *

@@ -5,6 +5,7 @@ from core.models import User, Item, Image
 from versatileimagefield.serializers import VersatileImageFieldSerializer
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
+
 class UserSerializer(serializers.ModelSerializer):
     profile_picture = VersatileImageFieldSerializer(
         sizes=[
@@ -14,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'profile_picture' )
+        fields = ('pk', 'username', 'profile_picture')
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -41,13 +42,16 @@ class ItemSerializer(GeoFeatureModelSerializer):
 
     def get_cnt_of_comments(self, obj):
         # TODO use calculated values instead of constant
-        return Comment.objects.filter(object_pk=obj.id, content_type=8, site_id=1).count()
+        return Comment.objects.filter(
+            object_pk=obj.id, content_type=8, site_id=1).count()
 
     class Meta:
         model = Item
         geo_field = "point"
 
-        fields = ('pk', 'memo','created_at', 'images', 'image_ids', 'user_id', 'user', 'price', 'address', 'created_at', 'cnt_of_comments')
+        fields = ('pk', 'memo', 'created_at', 'images', 'image_ids',
+                  'user_id', 'user', 'price', 'address', 'created_at',
+                  'cnt_of_comments')
 
     def create(self, validated_data):
         image_ids = validated_data.pop('image_ids')
