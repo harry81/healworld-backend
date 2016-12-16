@@ -2,11 +2,7 @@ from __future__ import unicode_literals
 
 from django.utils import timezone
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import User, AbstractUser, PermissionsMixin
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db import models
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from django.utils.translation import ugettext_lazy as _
@@ -15,10 +11,9 @@ from django.utils.translation import ugettext_lazy as _
 class User(AbstractUser):
     name = models.CharField(max_length=100, blank=True, null=True)
     profile_picture = VersatileImageField('User Profile',
-                                   blank=True,
-                                   null=True,
-                                   upload_to='user_profile/'
-    )
+                                          blank=True,
+                                          null=True,
+                                          upload_to='user_profile/')
 
 
 class Item(models.Model):
@@ -43,8 +38,8 @@ class Image(models.Model):
                                    blank=True,
                                    null=True,
                                    upload_to='items/',
-                                   ppoi_field='item_ppoi'
-    )
+                                   ppoi_field='item_ppoi')
+
     item_ppoi = PPOIField()
     created_at = models.DateTimeField(db_index=True,
                                       default=timezone.now, blank=True)

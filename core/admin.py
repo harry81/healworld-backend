@@ -1,18 +1,21 @@
 from django.contrib import admin
 from core.models import User, Item, Image
 
+
 class UserAdmin(admin.ModelAdmin):
     model = User
 
 admin.site.register(User, UserAdmin)
 
+
 class ImageInline(admin.TabularInline):
     model = Image
     extra = 1
 
+
 class ItemAdmin(admin.ModelAdmin):
     inlines = (ImageInline, )
-    list_display = ( "image_tag", "user", "memo", "address", "created_at")
+    list_display = ("image_tag", "user", "memo", "address", "created_at")
 
     def image_tag(self, instance):
         try:
@@ -27,6 +30,7 @@ class ItemAdmin(admin.ModelAdmin):
     image_tag.allow_tags = True
 
 admin.site.register(Item, ItemAdmin)
+
 
 class ImageAdmin(admin.ModelAdmin):
     pass
