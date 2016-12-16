@@ -12,7 +12,7 @@ router.register(r'api-comment', core_views.CommentAPIView,
 
 
 urlpatterns = [
-    url(r'^social_complete/', core_views.social_complete),
+    url(r'^get_token/', core_views.get_token),
     url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
     url(r'^', include(router.urls)),

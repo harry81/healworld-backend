@@ -13,7 +13,7 @@ jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
-def social_complete(request):
+def get_token(request):
     user = request.user
     try:
         payload = jwt_payload_handler(user)
