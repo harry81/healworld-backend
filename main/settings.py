@@ -27,6 +27,8 @@ DEBUG = os.getenv('DEBUG', True)
 
 ALLOWED_HOSTS = []
 
+SESSION_COOKIE_DOMAIN=".healworld.co.kr"
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -77,7 +79,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
   'fields': 'id, name, email, age_range'
 }
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/social_complete/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/get_token/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY')
