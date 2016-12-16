@@ -1,4 +1,6 @@
-from django.http import JsonResponse
+# -*- coding: utf-8 -*-
+from django.conf import settings
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
@@ -15,6 +17,7 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 def get_token(request):
     user = request.user
+
     try:
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
@@ -27,13 +30,16 @@ def get_token(request):
     except:
         provider = None
 
-    info = JsonResponse({
-        'username': user.username,
-        'token': token,
-        'provider': provider,
-    })
+    html = "<html><body>token %s </body></html>" % token
+    response = HttpResponse(html)
 
-    return info
+    response.set_cookie('jwt_token', token,
+                        domain=settings.SESSION_COOKIE_DOMAIN)
+    response.set_cookie('username', user.username,
+                        domain=settings.SESSION_COOKIE_DOMAIN)
+    response.set_cookie('provider', provider,
+                        domain=settings.SESSION_COOKIE_DOMAIN)
+    return response
 
 
 class ItemPagination(PageNumberPagination):
