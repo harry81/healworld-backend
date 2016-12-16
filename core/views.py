@@ -18,7 +18,6 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 def social_complete(request):
     user = request.user
-
     try:
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
@@ -66,8 +65,10 @@ class ImageAPIView(viewsets.ModelViewSet):
 
 
 class CommentAPIView(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('object_pk', )
     ordering = ('-submit_date',)
+
+    def get_queryset(self):
+        return Comment.objects.order_by('-submit_date')
