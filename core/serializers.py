@@ -42,8 +42,8 @@ class ImageSerializer(serializers.ModelSerializer):
         sizes=[
             ('full_size', 'url'),
             ('thumbnail__100x100', 'thumbnail__100x100'),
-            ('thumbnail__300x200', 'thumbnail__300x200'),
             ('thumbnail__400x400', 'thumbnail__400x400'),
+            ('crop__400x400', 'crop__400x400'),
         ]
     )
 
