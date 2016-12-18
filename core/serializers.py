@@ -1,9 +1,23 @@
-from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from django_comments.models import Comment
-from core.models import User, Item, Image
-from versatileimagefield.serializers import VersatileImageFieldSerializer
+from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from versatileimagefield.serializers import VersatileImageFieldSerializer
+from core.models import User, Item, Image
+from social.apps.django_app.default.models import UserSocialAuth
+
+
+class UserSocialAuthSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSocialAuth
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    social_auth = UserSocialAuthSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('pk', 'username', 'email', 'social_auth')
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -2,14 +2,17 @@
 from django.conf import settings
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
-from rest_framework.pagination import PageNumberPagination
-from rest_framework import filters
-from core.serializers import ItemSerializer, ImageSerializer, CommentSerializer
-from rest_framework_gis.filters import DistanceToPointFilter
-from core.models import Item
 from django_comments.models import Comment
+
+from rest_framework import viewsets, filters
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.decorators import list_route
+from core.serializers import (ItemSerializer, ImageSerializer,
+                              CommentSerializer, ProfileSerializer)
+from rest_framework_gis.filters import DistanceToPointFilter
 from rest_framework_jwt.settings import api_settings
+from core.models import Item, User
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -75,3 +78,13 @@ class CommentAPIView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Comment.objects.order_by('-submit_date')
+
+
+class ProfileAPIView(viewsets.ModelViewSet):
+    serializer_class = ProfileSerializer
+    queryset = User.objects.all()
+
+    @list_route()
+    def info(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
