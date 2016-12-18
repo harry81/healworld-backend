@@ -8,6 +8,11 @@ from social.apps.django_app.default.models import UserSocialAuth
 
 
 class UserSocialAuthSerializer(serializers.ModelSerializer):
+    extra_data = serializers.SerializerMethodField()
+
+    def get_extra_data(self, obj):
+        return obj.extra_data
+
     class Meta:
         model = UserSocialAuth
 
