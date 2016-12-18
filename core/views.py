@@ -33,7 +33,8 @@ def get_token(request):
     except:
         provider = None
 
-    html = "<html><body>token %s </body></html>" % token
+    html = "<meta http-equiv=\"refresh\" content=\"0; \
+    URL='https://www.healworld.co.kr'\" />"
     response = HttpResponse(html)
 
     response.set_cookie('jwt_token', token,
