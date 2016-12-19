@@ -21,16 +21,16 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 def get_token(request):
     user = request.user
 
-    payload = jwt_payload_handler(user)
-    token = jwt_encode_handler(payload)
-
     host = request.META['HTTP_HOST'].replace('backend', 'www')
 
     html = "<meta http-equiv=\"refresh\" content=\"0; \
-URL='%s://%s'\" />" % (request.META['wsgi.url_scheme'],
-                       host)
+URL='%s://%s'\" /> %s" % (request.META['wsgi.url_scheme'],
+                          host, api_settings.defaults.items())
 
     response = HttpResponse(html)
+
+    payload = jwt_payload_handler(user)
+    token = jwt_encode_handler(payload)
 
     response.set_cookie('jwt_token', token,
                         domain=settings.SESSION_COOKIE_DOMAIN)
