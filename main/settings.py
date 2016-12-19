@@ -28,7 +28,7 @@ DEBUG = os.getenv('DEBUG', True)
 
 ALLOWED_HOSTS = []
 
-SESSION_COOKIE_DOMAIN=".healworld.co.kr"
+SESSION_COOKIE_DOMAIN="localhost" if DEBUG else '.healworld.co.kr'
 
 # Application definition
 
@@ -194,6 +194,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
+}
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
 }
 
 try:
