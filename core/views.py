@@ -33,8 +33,12 @@ def get_token(request):
     except:
         provider = None
 
+    host = request.META['HTTP_HOST'].replace('backend', 'www')
+
     html = "<meta http-equiv=\"refresh\" content=\"0; \
-URL='%s://%s'\" />" % (request.META['wsgi.url_scheme'], request.META['HTTP_HOST'])
+URL='%s://%s'\" />" % (request.META['wsgi.url_scheme'],
+                       host)
+
     response = HttpResponse(html)
 
     response.set_cookie('jwt_token', token,
