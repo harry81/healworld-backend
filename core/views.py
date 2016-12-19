@@ -21,17 +21,8 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 def get_token(request):
     user = request.user
 
-    try:
-        payload = jwt_payload_handler(user)
-        token = jwt_encode_handler(payload)
-
-    except AttributeError:
-        token = None
-
-    try:
-        provider = user.social_auth.all()[0].provider
-    except:
-        provider = None
+    payload = jwt_payload_handler(user)
+    token = jwt_encode_handler(payload)
 
     host = request.META['HTTP_HOST'].replace('backend', 'www')
 
@@ -42,10 +33,6 @@ URL='%s://%s'\" />" % (request.META['wsgi.url_scheme'],
     response = HttpResponse(html)
 
     response.set_cookie('jwt_token', token,
-                        domain=settings.SESSION_COOKIE_DOMAIN)
-    response.set_cookie('username', user.username,
-                        domain=settings.SESSION_COOKIE_DOMAIN)
-    response.set_cookie('provider', provider,
                         domain=settings.SESSION_COOKIE_DOMAIN)
     return response
 
