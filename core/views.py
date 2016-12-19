@@ -34,7 +34,7 @@ def get_token(request):
         provider = None
 
     html = "<meta http-equiv=\"refresh\" content=\"0; \
-    URL='https://www.healworld.co.kr'\" />"
+URL='%s://%s'\" />" % (request.META['wsgi.url_scheme'], request.META['HTTP_HOST'])
     response = HttpResponse(html)
 
     response.set_cookie('jwt_token', token,
