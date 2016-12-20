@@ -17,6 +17,12 @@ class UserSocialAuthSerializer(serializers.ModelSerializer):
         model = UserSocialAuth
 
 
+class UserSocialAuthForListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSocialAuth
+        fields = ('provider', 'uid')
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     social_auth = UserSocialAuthSerializer(many=True, read_only=True)
 
@@ -26,6 +32,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    social_auth = UserSocialAuthForListSerializer(many=True, read_only=True)
     profile_picture = VersatileImageFieldSerializer(
         sizes=[
             ('thumbnail__50x50', 'thumbnail__50x50'),
@@ -34,7 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'profile_picture')
+        fields = ('pk', 'username', 'profile_picture', 'social_auth')
 
 
 class ImageSerializer(serializers.ModelSerializer):
