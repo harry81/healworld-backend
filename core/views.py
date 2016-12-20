@@ -21,10 +21,10 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 def get_token(request):
     user = request.user
 
-    host = request.META['HTTP_HOST'].replace('backend', 'www')
+    host = request.META['HTTP_HOST'].replace('backend', 'www').replace('8000', '8100')
     html = "<meta http-equiv=\"refresh\" content=\"0; \
-URL='%s://%s'\" /> %s" % (request.META['wsgi.url_scheme'],
-                          host, api_settings.defaults.items())
+URL='%s://%s'\" />" % (request.META['wsgi.url_scheme'],
+                          host)
 
     response = HttpResponse(html)
 
@@ -37,7 +37,11 @@ URL='%s://%s'\" /> %s" % (request.META['wsgi.url_scheme'],
 
 
 def show_api_settings(request):
-    html = "%s" % api_settings.defaults.items()
+    from rest_framework_jwt.settings import api_settings
+    jwt_value = request.META['HTTP_AUTHORIZATION'].replace('JWT ', '')
+
+    payload = api_settings.JWT_DECODE_HANDLER(jwt_value)
+    html = "%s<br>%s" % (api_settings.defaults.items(), payload)
     response = HttpResponse(html)
     return response
 
