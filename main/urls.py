@@ -14,6 +14,7 @@ router.register(r'api-comment', core_views.CommentAPIView,
 
 urlpatterns = [
     url(r'^get_token/', core_views.get_token),
+    url(r'^show_api_settings/', core_views.show_api_settings),
     url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
     url(r'^', include(router.urls)),

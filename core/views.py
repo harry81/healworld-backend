@@ -22,10 +22,9 @@ def get_token(request):
     user = request.user
 
     host = request.META['HTTP_HOST'].replace('backend', 'www')
-    html = "%s" % api_settings.defaults.items()
-#     html = "<meta http-equiv=\"refresh\" content=\"0; \
-# URL='%s://%s'\" /> %s" % (request.META['wsgi.url_scheme'],
-#                           host, api_settings.defaults.items())
+    html = "<meta http-equiv=\"refresh\" content=\"0; \
+URL='%s://%s'\" /> %s" % (request.META['wsgi.url_scheme'],
+                          host, api_settings.defaults.items())
 
     response = HttpResponse(html)
 
@@ -34,6 +33,12 @@ def get_token(request):
 
     response.set_cookie('jwt_token', token,
                         domain=settings.SESSION_COOKIE_DOMAIN)
+    return response
+
+
+def show_api_settings(request):
+    html = "%s" % api_settings.defaults.items()
+    response = HttpResponse(html)
     return response
 
 
