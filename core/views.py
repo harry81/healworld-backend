@@ -22,10 +22,10 @@ def get_token(request):
     user = request.user
 
     host = request.META['HTTP_HOST'].replace('backend', 'www')
-
-    html = "<meta http-equiv=\"refresh\" content=\"0; \
-URL='%s://%s'\" /> %s" % (request.META['wsgi.url_scheme'],
-                          host, api_settings.defaults.items())
+    html = "%s" % api_settings.defaults.items()
+#     html = "<meta http-equiv=\"refresh\" content=\"0; \
+# URL='%s://%s'\" /> %s" % (request.META['wsgi.url_scheme'],
+#                           host, api_settings.defaults.items())
 
     response = HttpResponse(html)
 
