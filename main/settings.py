@@ -30,6 +30,10 @@ SESSION_COOKIE_DOMAIN="localhost" if DEBUG else '.healworld.co.kr'
 
 ALLOWED_HOSTS = []
 
+ADMINS = (
+    ('pointer', 'pointer81@gmail.com'),
+)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -74,6 +78,10 @@ AUTHENTICATION_BACKENDS = (
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.naver.com'
+EMAIL_PORT = 587
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
