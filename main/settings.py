@@ -28,7 +28,6 @@ ISAWS = os.getenv('ISAWS', False)
 DEBUG = False if ISAWS else True
 SESSION_COOKIE_DOMAIN="localhost" if DEBUG else '.healworld.co.kr'
 
-ALLOWED_HOSTS = []
 
 ADMINS = (
     ('pointer', 'pointer81@gmail.com'),
@@ -192,6 +191,8 @@ CORS_ORIGIN_WHITELIST = (
     'healworld:8100',
     '127.0.0.1:8100'
 )
+
+ALLOWED_HOSTS = ['*']
 
 REST_FRAMEWORK = {
      'DEFAULT_PERMISSION_CLASSES': (
