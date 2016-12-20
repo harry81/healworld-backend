@@ -24,11 +24,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_xnb+ht0%h1mk188cuyn@7a6p63iki+7sbg(zn%1_@l00or%7o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', True)
+ISAWS = os.getenv('ISAWS', False)
+DEBUG = False if ISAWS else True
+SESSION_COOKIE_DOMAIN="localhost" if DEBUG else '.healworld.co.kr'
 
 ALLOWED_HOSTS = []
-
-SESSION_COOKIE_DOMAIN="localhost" if DEBUG else '.healworld.co.kr'
 
 # Application definition
 
