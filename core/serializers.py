@@ -64,7 +64,12 @@ class ItemSerializer(GeoFeatureModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
     user_id = serializers.CharField(max_length=20, write_only=True)
     user = UserSerializer(read_only=True)
+    image = serializers.SerializerMethodField()
     cnt_of_comments = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        image = obj.images.all().order_by('-created_at').first()
+        return ImageSerializer(image).data['itemshot']['crop__400x400']
 
     def get_cnt_of_comments(self, obj):
         # TODO use calculated values instead of constant
@@ -75,7 +80,7 @@ class ItemSerializer(GeoFeatureModelSerializer):
         model = Item
         geo_field = "point"
 
-        fields = ('pk', 'memo', 'created_at', 'images', 'image_ids',
+        fields = ('pk', 'memo', 'created_at', 'images', 'image_ids', 'image',
                   'user_id', 'user', 'price', 'address', 'created_at',
                   'cnt_of_comments')
 
