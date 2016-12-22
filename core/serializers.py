@@ -86,7 +86,7 @@ class ItemSerializer(GeoFeatureModelSerializer):
         model = Item
         geo_field = "point"
 
-        fields = ('pk', 'memo', 'created_at', 'images', 'image_ids', 'image',
+        fields = ('pk', 'title', 'memo', 'created_at', 'images', 'image_ids', 'image',
                   'user_id', 'user', 'price', 'address', 'created_at',
                   'cnt_of_comments')
 

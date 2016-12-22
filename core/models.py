@@ -17,6 +17,7 @@ class User(AbstractUser):
 
 
 class Item(models.Model):
+    title = models.CharField(max_length=512, blank=True, null=True)
     memo = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=None, null=True)
     price = models.IntegerField(default=1000)
