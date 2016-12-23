@@ -33,11 +33,16 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     social_auth = UserSocialAuthForListSerializer(many=True, read_only=True)
-    profile_picture = VersatileImageFieldSerializer(
-        sizes=[
-            ('thumbnail__50x50', 'thumbnail__50x50'),
-        ]
-    )
+    profile_picture = serializers.SerializerMethodField()
+
+    def get_profile_picture(self, obj):
+        if obj.profile_picture.name == '':
+            if obj.social_auth.all().exists():
+               social = obj.social_auth.all()[0]
+               if social.provider == 'facebook':
+                   return 'https://graph.facebook.com/%s/picture/' % social.uid
+
+        return obj.profile_picture.thumbnail['50x50'].url
 
     class Meta:
         model = User
