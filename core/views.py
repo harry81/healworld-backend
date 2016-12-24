@@ -91,8 +91,14 @@ class ProfileAPIView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def patch(self, request):
+        data_obj = request.data.copy()
+
+        if 'notification_push' in data_obj:
+            data_obj['notification_push'] =\
+                data_obj['notification_push'].split('/')[-1]
+
         user = request.user
-        user.__dict__.update(**request.data)
+        user.__dict__.update(**data_obj)
         user.save()
 
         return Response(None, status=status.HTTP_204_NO_CONTENT)
