@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from django_comments.models import Comment
 
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
@@ -89,3 +89,10 @@ class ProfileAPIView(viewsets.ModelViewSet):
     def info(self, request):
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
+
+    def patch(self, request):
+        user = request.user
+        user.__dict__.update(**request.data)
+        user.save()
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)

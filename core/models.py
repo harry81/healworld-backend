@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class User(AbstractUser):
     name = models.CharField(max_length=100, blank=True, null=True)
+    notification_push = models.CharField(max_length=512, blank=True, null=True, default=True)
     profile_picture = VersatileImageField('User Profile',
                                           blank=True,
                                           null=True,
