@@ -214,6 +214,7 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
 }
 
+GCM_SERVER_KEY = os.getenv('GCM_SERVER_KEY')
 
 try:
     from settings_local import *

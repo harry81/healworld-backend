@@ -1,9 +1,18 @@
 from __future__ import unicode_literals
 
+import requests
+import json
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db import models
+from django.contrib.contenttypes.models import ContentType
+
+from django.core.mail import send_mail
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django_comments.models import Comment
+
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from django.utils.translation import ugettext_lazy as _
 
@@ -15,6 +24,22 @@ class User(AbstractUser):
                                           blank=True,
                                           null=True,
                                           upload_to='user_profile/')
+
+    def send_push_notification(self):
+        if self.notification_push is not None:
+
+            url = "https://android.googleapis.com/gcm/send"
+            headers = {"Authorization": 'key=%s' % settings.GCM_SERVER_KEY,
+                       "Content-Type": "application/json" }
+            payload = {"registration_ids": [self.notification_push],
+                       "data": {"title": "title",
+                                "body": "body",
+                                "color": "red"},
+            }
+
+            req = requests.post(url, data=json.dumps(payload), headers=headers)
+
+            print 'send-push', self.notification_push
 
 
 class Item(models.Model):
@@ -29,6 +54,13 @@ class Item(models.Model):
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.memo)
+
+    def get_comment_users(self):
+        comments = Comment.objects.filter(
+            content_type=ContentType.objects.get(model='item'),
+            object_pk=self.pk)
+        users = set([ele.user.id for ele in comments.exclude(user=None).exclude(user_id=self.user).distinct()])
+        return users
 
 
 class Image(models.Model):
@@ -48,3 +80,15 @@ class Image(models.Model):
 
     def __unicode__(self):
         return u'%s %s' % (self.id, self.itemshot)
+
+
+@receiver(post_save, sender=Comment)
+def send_notification(sender, **kwargs):
+    comment = kwargs.get('instance')
+
+    item = comment.content_type.get_all_objects_for_this_type().get(id=comment.object_pk)
+    users = item.get_comment_users()
+    users = User.objects.all()
+
+    for user in User.objects.filter(id__in=users):
+         user.send_push_notification()

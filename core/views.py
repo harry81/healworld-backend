@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 from django.conf import settings
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
@@ -91,11 +92,11 @@ class ProfileAPIView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def patch(self, request):
-        data_obj = request.data.copy()
+        data_obj = json.loads(json.dumps(request.data))
 
         if 'notification_push' in data_obj:
             data_obj['notification_push'] =\
-                data_obj['notification_push'].split('/')[-1]
+                data_obj['notification_push'].split('/')[-1].strip("'")
 
         user = request.user
         user.__dict__.update(**data_obj)
