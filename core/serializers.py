@@ -38,9 +38,10 @@ class UserSerializer(serializers.ModelSerializer):
     def get_profile_picture(self, obj):
         if obj.profile_picture.name == '':
             if obj.social_auth.all().exists():
-               social = obj.social_auth.all()[0]
-               if social.provider == 'facebook':
-                   return 'https://graph.facebook.com/%s/picture/' % social.uid
+                social = obj.social_auth.all()[0]
+                if social.provider == 'facebook':
+                    return 'https://graph.facebook.com/%s/picture/'\
+                        % social.uid
 
         return obj.profile_picture.thumbnail['50x50'].url
 
@@ -91,7 +92,8 @@ class ItemSerializer(GeoFeatureModelSerializer):
         model = Item
         geo_field = "point"
 
-        fields = ('pk', 'title', 'memo', 'created_at', 'images', 'image_ids', 'image',
+        fields = ('pk', 'title', 'memo', 'created_at', 'images',
+                  'image_ids', 'image',
                   'user_id', 'user', 'price', 'address', 'created_at',
                   'cnt_of_comments')
 

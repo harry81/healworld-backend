@@ -19,7 +19,8 @@ from django.utils.translation import ugettext_lazy as _
 
 class User(AbstractUser):
     name = models.CharField(max_length=100, blank=True, null=True)
-    notification_push = models.CharField(max_length=512, blank=True, null=True, default=True)
+    notification_push = models.CharField(max_length=512, blank=True,
+                                         null=True, default=True)
     profile_picture = VersatileImageField('User Profile',
                                           blank=True,
                                           null=True,
@@ -30,11 +31,12 @@ class User(AbstractUser):
 
             url = "https://android.googleapis.com/gcm/send"
             headers = {"Authorization": 'key=%s' % settings.GCM_SERVER_KEY,
-                       "Content-Type": "application/json" }
-            payload = {"registration_ids": [self.notification_push],
-                       "data": {"title": "title",
-                                "body": "body",
-                                "color": "red"},
+                       "Content-Type": "application/json"}
+            payload = {
+                "registration_ids": [self.notification_push],
+                "data": {"title": "title",
+                         "body": "body",
+                         "color": "red"}
             }
 
             req = requests.post(url, data=json.dumps(payload), headers=headers)
@@ -59,7 +61,9 @@ class Item(models.Model):
         comments = Comment.objects.filter(
             content_type=ContentType.objects.get(model='item'),
             object_pk=self.pk)
-        users = set([ele.user.id for ele in comments.exclude(user=None).exclude(user_id=self.user).distinct()])
+        users = set([
+            ele.user.id for ele in comments.exclude(
+                user=None).exclude(user_id=self.user).distinct()])
         return users
 
 
@@ -86,9 +90,10 @@ class Image(models.Model):
 def send_notification(sender, **kwargs):
     comment = kwargs.get('instance')
 
-    item = comment.content_type.get_all_objects_for_this_type().get(id=comment.object_pk)
+    item = comment.content_type.get_all_objects_for_this_type().get(
+        id=comment.object_pk)
     users = item.get_comment_users()
     users = User.objects.all()
 
     for user in User.objects.filter(id__in=users):
-         user.send_push_notification()
+        user.send_push_notification()

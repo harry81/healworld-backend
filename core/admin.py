@@ -15,7 +15,8 @@ class ImageInline(admin.TabularInline):
 
 class ItemAdmin(admin.ModelAdmin):
     inlines = (ImageInline, )
-    list_display = ("image_tag", "user", "title", "memo", "address", "created_at")
+    list_display = ("image_tag", "user", "title",
+                    "memo", "address", "created_at")
 
     def image_tag(self, instance):
         try:

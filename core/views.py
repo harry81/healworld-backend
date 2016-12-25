@@ -22,10 +22,11 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 def get_token(request):
     user = request.user
 
-    host = request.META['HTTP_HOST'].replace('backend', 'www').replace('8000', '8100')
+    host = request.META['HTTP_HOST'].replace(
+        'backend', 'www').replace('8000', '8100')
     html = "<meta http-equiv=\"refresh\" content=\"0; \
 URL='%s://%s'\" />" % (request.META['wsgi.url_scheme'],
-                          host)
+                       host)
 
     response = HttpResponse(html)
 
