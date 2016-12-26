@@ -130,11 +130,12 @@ WSGI_APPLICATION = 'main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'db_healworld',
-        'USER': 'healworld',
-        'PASSWORD': 'pw-healworld',
-        'HOST': 'healworldinstance.cqzylqmcjdma.ap-northeast-2.rds.amazonaws.com',
-        'PORT': '5432',    }
+        'NAME': os.getenv('RDS_DB_NAME'),
+        'USER': os.getenv('RDS_USERNAME'),
+        'PASSWORD': os.getenv('RDS_PASSWORD'),
+        'HOST': os.getenv('RDS_HOSTNAME'),
+        'PORT': '5432',
+    }
 }
 
 # Password validation
