@@ -20,7 +20,7 @@ class ItemAdmin(FSMTransitionMixin, admin.ModelAdmin):
                     "memo", "address", "created_at")
     fields = ("title", "memo", "user", "price", )
     list_filter = ('state',)
-    fsm_field = ['state',]
+    fsm_field = ['state', ]
 
     def image_tag(self, instance):
         try:

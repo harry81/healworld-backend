@@ -68,7 +68,8 @@ class Item(models.Model):
                 user=None).exclude(user_id=self.user).distinct()])
         return users
 
-    @transition(field=state, source=['created', 'ongoing'], target='completed', custom=dict(admin=True))
+    @transition(field=state, source=['created', 'ongoing'],
+                target='completed', custom=dict(admin=True))
     def complete(self):
         pass
 
