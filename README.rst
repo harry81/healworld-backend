@@ -22,8 +22,14 @@ Reference
 =================
  Troubleshooting
 =================
+- States of Item
 
-- S3ResponseError: 403 Forbidden
+.. code:: bash
+생성 : created
+
+진행중 : ongoing
+
+완료 : completed
 
 .. code:: bash
 

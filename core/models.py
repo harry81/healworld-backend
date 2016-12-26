@@ -13,6 +13,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_comments.models import Comment
 
+from django_fsm import FSMField, transition
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from django.utils.translation import ugettext_lazy as _
 
@@ -53,6 +54,7 @@ class Item(models.Model):
                               blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=256, blank=True, null=True)
+    state = FSMField(default='created', protected=True)
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.memo)
@@ -65,6 +67,14 @@ class Item(models.Model):
             ele.user.id for ele in comments.exclude(
                 user=None).exclude(user_id=self.user).distinct()])
         return users
+
+    @transition(field=state, source=['created', 'ongoing'], target='completed', custom=dict(admin=True))
+    def complete(self):
+        pass
+
+    @transition(field=state, source='created', target='ongoing')
+    def going(self):
+        pass
 
 
 class Image(models.Model):

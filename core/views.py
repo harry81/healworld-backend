@@ -8,7 +8,7 @@ from django_comments.models import Comment
 from rest_framework import viewsets, filters, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, detail_route
 from core.serializers import (ItemSerializer, ImageSerializer,
                               CommentSerializer, ProfileSerializer)
 from rest_framework_gis.filters import DistanceToPointFilter
@@ -57,13 +57,36 @@ class ItemAPIView(viewsets.ModelViewSet):
     pagination_class = ItemPagination
 
     distance_filter_field = 'point'
-    filter_backends = (DistanceToPointFilter, filters.SearchFilter)
+    filter_backends = (DistanceToPointFilter,
+                       filters.SearchFilter, DjangoFilterBackend)
     bbox_filter_include_overlapping = True  # Optional
     distance_filter_convert_meters = True
     search_fields = ('memo', )
+    filter_fields = ('state',)
 
     def get_queryset(self):
         return Item.objects.order_by('-created_at')
+
+    @detail_route(methods=['patch'])
+    def state_action(self, request, pk):
+        # TODO : check the permission
+
+        action = request.GET['action']
+        if action not in ['going', 'complete']:
+            return Response("Action [ %s ] not defined" % action,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            item = Item.objects.get(id=pk)
+        except Item.DoesNotExist:
+            return Response("Item is not exists[%s]" % pk,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        methodToCall = getattr(item, action)
+        methodToCall()
+        item.save()
+
+        return Response('%s' % action, status=status.HTTP_200_OK)
 
 
 class ImageAPIView(viewsets.ModelViewSet):

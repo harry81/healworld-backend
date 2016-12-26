@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'social.apps.django_app.default',
     'rest_framework_social_oauth2',
+    'fsm_admin',
     'core'
 ]
 
@@ -111,6 +112,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.core.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'social.apps.django_app.context_processors.backends',
@@ -121,7 +123,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
@@ -213,6 +214,7 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
 }
+FSM_ADMIN_FORCE_PERMIT = True
 
 GCM_SERVER_KEY = os.getenv('GCM_SERVER_KEY')
 

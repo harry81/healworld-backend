@@ -1,5 +1,6 @@
 from django.contrib import admin
 from core.models import User, Item, Image
+from fsm_admin.mixins import FSMTransitionMixin
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -13,11 +14,13 @@ class ImageInline(admin.TabularInline):
     extra = 1
 
 
-class ItemAdmin(admin.ModelAdmin):
+class ItemAdmin(FSMTransitionMixin, admin.ModelAdmin):
     inlines = (ImageInline, )
-    list_display = ("image_tag", "user", "title",
+    list_display = ("image_tag", "user", 'state', "title",
                     "memo", "address", "created_at")
-    fields = ("title", "memo", "user", "price",)
+    fields = ("title", "memo", "user", "price", )
+    list_filter = ('state',)
+    fsm_field = ['state',]
 
     def image_tag(self, instance):
         try:
