@@ -17,6 +17,7 @@ class ItemAdmin(admin.ModelAdmin):
     inlines = (ImageInline, )
     list_display = ("image_tag", "user", "title",
                     "memo", "address", "created_at")
+    fields = ("title", "memo", "user", "price",)
 
     def image_tag(self, instance):
         try:

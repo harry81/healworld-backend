@@ -28,7 +28,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'email', 'social_auth')
+        fields = ('pk', 'username', 'email',
+                  'social_auth', 'notification_push')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -55,6 +56,7 @@ class ImageSerializer(serializers.ModelSerializer):
         sizes=[
             ('full_size', 'url'),
             ('thumbnail__100x100', 'thumbnail__100x100'),
+            ('thumbnail__200x200', 'thumbnail__200x200'),
             ('thumbnail__400x400', 'thumbnail__400x400'),
             ('crop__400x400', 'crop__400x400'),
         ]
