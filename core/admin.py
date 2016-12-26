@@ -4,7 +4,13 @@ from fsm_admin.mixins import FSMTransitionMixin
 
 
 class UserAdmin(admin.ModelAdmin):
+    list_display = ("username", "profile_picture", "notification")
+
+    def notification(self, instance):
+        return True if instance.notification_push else ''
+
     model = User
+
 
 admin.site.register(User, UserAdmin)
 

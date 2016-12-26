@@ -44,6 +44,20 @@ class User(AbstractUser):
 
             print 'send-push', self.notification_push
 
+    def profile_url(self):
+        image_url = '/assets/imgs/person.png'
+
+        if self.profile_picture.name == '':
+            if self.social_auth.all().exists():
+                social = self.social_auth.all()[0]
+                if social.provider == 'facebook':
+                    image_url = 'https://graph.facebook.com/%s/picture/'\
+                                % social.uid
+        else:
+            image_url = self.profile_picture.thumbnail['50x50'].url
+
+        return image_url
+
 
 class Item(models.Model):
     title = models.CharField(max_length=512, blank=True, null=True)
