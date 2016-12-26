@@ -41,10 +41,13 @@ class UserSerializer(serializers.ModelSerializer):
             if obj.social_auth.all().exists():
                 social = obj.social_auth.all()[0]
                 if social.provider == 'facebook':
-                    return 'https://graph.facebook.com/%s/picture/'\
-                        % social.uid
+                    image_url = 'https://graph.facebook.com/%s/picture/'\
+                                % social.uid
             else:
                 image_url = '/assets/imgs/person.png'
+
+        else:
+            image_url = obj.profile_picture.thumbnail['50x50'].url
 
         return image_url
 
