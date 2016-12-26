@@ -43,8 +43,10 @@ class UserSerializer(serializers.ModelSerializer):
                 if social.provider == 'facebook':
                     return 'https://graph.facebook.com/%s/picture/'\
                         % social.uid
+            else:
+                image_url = '/assets/imgs/person.png'
 
-        return obj.profile_picture.thumbnail['50x50'].url
+        return image_url
 
     class Meta:
         model = User
