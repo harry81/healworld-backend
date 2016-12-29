@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
 from django.core.exceptions import ObjectDoesNotExist
 from django_comments.models import Comment
+from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.measure import D
+
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from versatileimagefield.serializers import VersatileImageFieldSerializer
@@ -66,6 +70,7 @@ class ItemSerializer(GeoFeatureModelSerializer):
     user_id = serializers.CharField(max_length=20, write_only=True)
     user = UserSerializer(read_only=True)
     image = serializers.SerializerMethodField()
+    distance = serializers.SerializerMethodField()
     cnt_of_comments = serializers.SerializerMethodField()
 
     def get_image(self, obj):
@@ -83,12 +88,23 @@ class ItemSerializer(GeoFeatureModelSerializer):
         return Comment.objects.filter(
             object_pk=obj.id, content_type=8, site_id=1).count()
 
+    def get_distance(self, obj):
+        try:
+            request = self.context['request']
+            point = GEOSGeometry('POINT(%s)' %
+                                 request.GET['point'].replace(",", " "))
+            distance = obj.point.distance(point) * 100
+            dist = D(km=distance)
+        except:
+            return None
+        return round(dist.km, 1)
+
     class Meta:
         model = Item
         geo_field = "point"
 
         fields = ('pk', 'title', 'memo', 'created_at', 'images',
-                  'image_ids', 'image',
+                  'image_ids', 'image', 'distance',
                   'user_id', 'user', 'price', 'address', 'created_at',
                   'cnt_of_comments')
 
