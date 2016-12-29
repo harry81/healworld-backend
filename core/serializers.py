@@ -129,5 +129,7 @@ class ItemSerializer(GeoFeatureModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Comment
