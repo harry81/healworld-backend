@@ -133,3 +133,16 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
+
+    def create(self, validated_data):
+        req = self.context['request']
+        user_id = req.data.get('user', None)
+
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+                validated_data['user'] = user
+            except:
+                pass
+
+        return super(CommentSerializer, self).create(validated_data)
