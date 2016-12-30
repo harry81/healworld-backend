@@ -126,7 +126,6 @@ def send_notification(sender, **kwargs):
     item = comment.content_type.get_all_objects_for_this_type().get(
         id=comment.object_pk)
     users = item.get_comment_users()
-    users = User.objects.all()
 
     for user in User.objects.filter(id__in=users):
         user.send_push_notification()
