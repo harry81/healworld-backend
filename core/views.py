@@ -62,7 +62,7 @@ class ItemAPIView(viewsets.ModelViewSet):
     bbox_filter_include_overlapping = True  # Optional
     distance_filter_convert_meters = True
     search_fields = ('memo', )
-    filter_fields = ('state',)
+    filter_fields = ('state', 'user')
 
     def get_queryset(self):
         return Item.live_objects.order_by('-created_at')
