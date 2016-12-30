@@ -65,7 +65,7 @@ class ItemAPIView(viewsets.ModelViewSet):
     filter_fields = ('state',)
 
     def get_queryset(self):
-        return Item.objects.order_by('-created_at')
+        return Item.live_objects.order_by('-created_at')
 
     @detail_route(methods=['patch'])
     def state_action(self, request, pk):

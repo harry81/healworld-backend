@@ -59,6 +59,10 @@ class User(AbstractUser):
 
         return image_url
 
+class ItemManager(models.Manager):
+    def get_queryset(self):
+        return super(ItemManager, self).get_queryset().filter(deleted=False)
+
 
 class Item(models.Model):
     title = models.CharField(max_length=512, blank=True, null=True)
@@ -70,6 +74,9 @@ class Item(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=256, blank=True, null=True)
     state = FSMField(default='created', protected=True)
+    deleted = models.BooleanField(default=False)
+    objects = models.Manager() # The default manager.
+    live_objects = ItemManager()
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.memo)
