@@ -44,7 +44,8 @@ class User(AbstractUser):
 
             print 'send-push', self.notification_push
 
-    def profile_url(self):
+    @property
+    def profile_picture_url(self):
         image_url = '/assets/imgs/person.png'
 
         if self.profile_picture.name == '':

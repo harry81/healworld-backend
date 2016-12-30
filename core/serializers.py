@@ -32,20 +32,16 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'email',
+        fields = ('pk', 'username', 'email', 'profile_picture_url',
                   'social_auth', 'notification_push')
 
 
 class UserSerializer(serializers.ModelSerializer):
     social_auth = UserSocialAuthForListSerializer(many=True, read_only=True)
-    profile_picture = serializers.SerializerMethodField()
-
-    def get_profile_picture(self, obj):
-        return obj.profile_url()
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'profile_picture', 'social_auth')
+        fields = ('pk', 'username', 'profile_picture_url', 'social_auth')
 
 
 class ImageSerializer(serializers.ModelSerializer):
