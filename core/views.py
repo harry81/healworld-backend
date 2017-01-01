@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from django.conf import settings
+from django.contrib.auth import logout
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from django_comments.models import Comment
@@ -114,6 +115,11 @@ class ProfileAPIView(viewsets.ModelViewSet):
     def info(self, request):
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
+
+    @list_route()
+    def logout(self, request):
+        logout(request)
+        return Response({'logout':"ok"}, status=status.HTTP_200_OK)
 
     def patch(self, request):
         data_obj = json.loads(json.dumps(request.data))

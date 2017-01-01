@@ -107,7 +107,7 @@ class ItemSerializer(GeoFeatureModelSerializer):
         fields = ('pk', 'title', 'memo', 'created_at', 'images',
                   'image_ids', 'image', 'distance',
                   'user_id', 'user', 'price', 'address', 'created_at',
-                  'cnt_of_comments')
+                  'cnt_of_comments', 'state')
 
     def create(self, validated_data):
         image_ids = validated_data.pop('image_ids')
