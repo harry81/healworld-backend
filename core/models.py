@@ -87,7 +87,7 @@ class Item(models.Model):
             object_pk=self.pk)
         users = set([
             ele.user.id for ele in comments.exclude(
-                user=None).exclude(user_id=self.user).distinct()])
+                user=None).distinct()])
         return users
 
     @transition(field=state, source=['created', 'ongoing'],
@@ -127,5 +127,5 @@ def send_notification(sender, **kwargs):
         id=comment.object_pk)
     users = item.get_comment_users()
 
-    for user in User.objects.filter(id__in=users):
+    for user in User.objects.filter(id__in=users).exclude(id=comment.user.id):
         user.send_push_notification()
