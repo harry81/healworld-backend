@@ -89,6 +89,11 @@ class ItemAPIView(viewsets.ModelViewSet):
 
         return Response('%s' % action, status=status.HTTP_200_OK)
 
+    def list(self, request, *args, **kwargs):
+        response = super(ItemAPIView, self).list(request, args, kwargs)
+        response.data['request_query'] = dict(request.GET)
+        return response
+
 
 class ImageAPIView(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
