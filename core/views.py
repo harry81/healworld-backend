@@ -108,7 +108,8 @@ class ItemAPIView(viewsets.ModelViewSet):
             ret = {'result': '%s not exist' % item_id}
             return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(None, status=status.HTTP_200_OK)
+        ret = {'result': '%s deleted' % item_id}
+        return Response(ret, status=status.HTTP_200_OK)
 
 
 class ImageAPIView(viewsets.ModelViewSet):
