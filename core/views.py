@@ -94,6 +94,22 @@ class ItemAPIView(viewsets.ModelViewSet):
         response.data['request_query'] = dict(request.GET)
         return response
 
+    def patch(self, request):
+        data_obj = json.loads(json.dumps(request.data))
+        item_id = data_obj.pop('item_id')
+
+        try:
+            user = request.user
+            item = Item.objects.get(id=item_id, user=user)
+            item.__dict__.update(**data_obj)
+            item.save()
+
+        except Item.DoesNotExist:
+            ret = {'result': '%s not exist' % item_id}
+            return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(None, status=status.HTTP_200_OK)
+
 
 class ImageAPIView(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
