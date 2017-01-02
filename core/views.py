@@ -62,7 +62,7 @@ class ItemAPIView(viewsets.ModelViewSet):
                        filters.SearchFilter, DjangoFilterBackend)
     bbox_filter_include_overlapping = True  # Optional
     distance_filter_convert_meters = True
-    search_fields = ('memo', )
+    search_fields = ('memo', 'title')
     filter_fields = ('state', 'user')
 
     def get_queryset(self):
