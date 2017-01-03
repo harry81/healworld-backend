@@ -140,6 +140,7 @@ class ProfileAPIView(viewsets.ModelViewSet):
 
     @list_route()
     def logout(self, request):
+        request.session.flush()
         logout(request)
         return Response({'logout':"ok"}, status=status.HTTP_200_OK)
 
