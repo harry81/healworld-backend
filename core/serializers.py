@@ -85,6 +85,8 @@ class ItemSerializer(GeoFeatureModelSerializer):
             object_pk=obj.id, content_type=8, site_id=1).count()
 
     def get_distance(self, obj):
+        dist = D(m=0)
+
         try:
             request = self.context['request']
             key = [x for x in request.GET.keys() if 'point' in x]
@@ -94,8 +96,7 @@ class ItemSerializer(GeoFeatureModelSerializer):
                                      request.GET[key[0]].replace(",", " "))
                 dist = D(km=obj.point.distance(point) * 100)
         except:
-            return None
-
+            return dist
 
         if round(dist.km, 1) == 0:
             return "%sm" % round(dist.m, 1)
