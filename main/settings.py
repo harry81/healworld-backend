@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import datetime
+import raven
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     'social.apps.django_app.default',
     'rest_framework_social_oauth2',
     'fsm_admin',
+    'raven.contrib.django.raven_compat',
     'core'
 ]
 
@@ -219,6 +221,10 @@ JWT_AUTH = {
 FSM_ADMIN_FORCE_PERMIT = True
 
 GCM_SERVER_KEY = os.getenv('GCM_SERVER_KEY')
+
+RAVEN_CONFIG = {
+    'dsn': "https://%s@sentry.io/127326" % os.getenv('RAVEN_DSN'),
+}
 
 try:
     from settings_local import *
