@@ -85,7 +85,6 @@ class ItemSerializer(GeoFeatureModelSerializer):
             object_pk=obj.id, content_type=8, site_id=1).count()
 
     def get_distance(self, obj):
-
         try:
             request = self.context['request']
             point = GEOSGeometry('POINT(%s)' %
