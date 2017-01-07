@@ -87,9 +87,12 @@ class ItemSerializer(GeoFeatureModelSerializer):
     def get_distance(self, obj):
         try:
             request = self.context['request']
-            point = GEOSGeometry('POINT(%s)' %
-                                 request.GET['point'].replace(",", " "))
-            dist = D(km=obj.point.distance(point) * 100)
+            key = [x for x in request.GET.keys() if 'point' in x]
+
+            if key:
+                point = GEOSGeometry('POINT(%s)' %
+                                     request.GET[key[0]].replace(",", " "))
+                dist = D(km=obj.point.distance(point) * 100)
         except:
             return None
 
