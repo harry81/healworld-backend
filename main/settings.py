@@ -74,6 +74,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
+    'social.backends.kakao.KakaoOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.naver.NaverOAuth2',
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
@@ -98,6 +99,8 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/get_token/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
+SOCIAL_AUTH_KAKAO_KEY = os.getenv('SOCIAL_AUTH_KAKAO_KEY')
+SOCIAL_AUTH_KAKAO_SECRET = os.getenv('SOCIAL_AUTH_KAKAO_SECRET')
 SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET')
 SOCIAL_AUTH_NAVER_KEY = os.getenv('SOCIAL_AUTH_NAVER_KEY')
