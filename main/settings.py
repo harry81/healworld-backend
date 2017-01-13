@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'rest_framework_social_oauth2',
     'fsm_admin',
     'raven.contrib.django.raven_compat',
+    'djcelery',
 
     # private app
     'core'
@@ -233,7 +234,14 @@ RAVEN_CONFIG = {
     'dsn': "https://%s@sentry.io/127326" % os.getenv('RAVEN_DSN'),
 }
 
+
+
 try:
     from settings_local import *
 except:
     pass
+
+
+
+import djcelery
+djcelery.setup_loader()
