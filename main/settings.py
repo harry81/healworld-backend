@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import datetime
 import raven
+import urllib
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -62,7 +63,7 @@ INSTALLED_APPS = [
     'djcelery',
 
     # private app
-    'core'
+    'core',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -234,14 +235,38 @@ RAVEN_CONFIG = {
     'dsn': "https://%s@sentry.io/127326" % os.getenv('RAVEN_DSN'),
 }
 
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', '')
 
+BROKER_URL = 'sqs://{0}:{1}@'.format(
+    urllib.quote(AWS_ACCESS_KEY_ID, safe=''),
+    urllib.quote(AWS_SECRET_ACCESS_KEY, safe='')
+)
+
+BROKER_TRANSPORT_OPTIONS = {
+    'region': '.ap-northeast-2',
+    'polling_interval': 3,
+    'visibility_timeout': 3600,
+}
+CELERY_SEND_TASK_ERROR_EMAILS = True
+
+
+BROKER_TRANSPORT = 'sqs'
+BROKER_USER = AWS_ACCESS_KEY_ID
+BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
+
+CELERY_DEFAULT_QUEUE = 'celery-myapp-production'
+CELERY_QUEUES = {
+    CELERY_DEFAULT_QUEUE: {
+        'exchange': CELERY_DEFAULT_QUEUE,
+        'binding_key': CELERY_DEFAULT_QUEUE,
+    }
+}
 
 try:
     from settings_local import *
 except:
     pass
-
-
 
 import djcelery
 djcelery.setup_loader()
