@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django_comments',
     'django_extensions',
     'django.contrib.gis',
+
+    #third party
     'rest_framework',
     'rest_framework_gis',
     'django_filters',
@@ -57,6 +59,8 @@ INSTALLED_APPS = [
     'rest_framework_social_oauth2',
     'fsm_admin',
     'raven.contrib.django.raven_compat',
+
+    # private app
     'core'
 ]
 
