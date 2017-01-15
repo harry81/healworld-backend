@@ -16,6 +16,7 @@ from django_comments.models import Comment
 from django_fsm import FSMField, transition
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from django.utils.translation import ugettext_lazy as _
+from .tasks import debug_task, send_email_healworld
 
 
 class User(AbstractUser):
@@ -122,10 +123,12 @@ class Image(models.Model):
 @receiver(post_save, sender=Comment)
 def send_notification(sender, **kwargs):
     comment = kwargs.get('instance')
+    send_email_healworld.apply_async((comment.comment,), countdown=3)
 
     item = comment.content_type.get_all_objects_for_this_type().get(
         id=comment.object_pk)
     users = item.get_comment_users()
+    print 'debug_task()'
 
     for user in User.objects.filter(id__in=users).exclude(id=comment.user.id):
         user.send_push_notification()
