@@ -1,4 +1,4 @@
-from main.celery import app as celery_app
+from main.celery_app import app as celery_app
 
 @celery_app.task(bind=True)
 def debug_task(self):
