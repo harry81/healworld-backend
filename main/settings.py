@@ -75,6 +75,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
@@ -104,6 +105,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/get_token/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
 
 SOCIAL_AUTH_KAKAO_KEY = os.getenv('SOCIAL_AUTH_KAKAO_KEY')
 SOCIAL_AUTH_KAKAO_SECRET = os.getenv('SOCIAL_AUTH_KAKAO_SECRET')
