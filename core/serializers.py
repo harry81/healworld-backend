@@ -33,7 +33,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('pk', 'username', 'email', 'profile_picture_url',
-                  'social_auth', 'notification_push')
+                  'social_auth', 'notification_push', 'phone')
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -31,7 +31,7 @@ class User(AbstractUser):
     profile_picture_url = models.CharField(max_length=512, blank=True,
                                            null=True, default='')
     phone = models.CharField(max_length=32, blank=True,
-                             null=True, default=True)
+                             null=True, default=None)
 
 
     def send_push_notification(self):

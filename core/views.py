@@ -154,5 +154,7 @@ class ProfileAPIView(viewsets.ModelViewSet):
         user = request.user
         user.__dict__.update(**data_obj)
         user.save()
+        print "%s %s" % (user.id, user.phone)
 
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        ret = {'result': '%s patched' % user.id}
+        return Response(ret, status=status.HTTP_200_OK)
