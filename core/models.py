@@ -30,6 +30,9 @@ class User(AbstractUser):
                                           upload_to='user_profile/')
     profile_picture_url = models.CharField(max_length=512, blank=True,
                                            null=True, default='')
+    phone = models.CharField(max_length=32, blank=True,
+                             null=True, default=True)
+
 
     def send_push_notification(self):
         if self.notification_push is not None:
@@ -77,6 +80,7 @@ class Item(models.Model):
     memo = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=None, null=True)
     price = models.IntegerField(default=1000)
+    grade = models.IntegerField(default=3)
     point = models.PointField(verbose_name=_("Item location"),
                               blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
