@@ -2,6 +2,7 @@
 
 from main.celery_app import app as celery_app
 from django.core.mail import send_mail
+from core.sendsms import send_sms
 
 
 @celery_app.task(bind=True)
@@ -14,6 +15,13 @@ def send_email_healworld(self, comment):
         u'신규 댓글',
         comment.comment,
         'noreply@mail.healworld.co.kr',
-        [item.user.email],
+        ['chharry@gmail.com'],
         fail_silently=False,
     )
+
+@celery_app.task(bind=True)
+def send_sms_healworld(self, comment):
+    sender = '01064117846'
+    receivers = ['01064117846', ]
+
+    send_sms(sender, receivers, comment.comment)
