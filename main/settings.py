@@ -104,8 +104,8 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 }
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/get_token/'
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_KAKAO_KEY = os.getenv('SOCIAL_AUTH_KAKAO_KEY')
 SOCIAL_AUTH_KAKAO_SECRET = os.getenv('SOCIAL_AUTH_KAKAO_SECRET')
@@ -113,6 +113,17 @@ SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET')
 SOCIAL_AUTH_NAVER_KEY = os.getenv('SOCIAL_AUTH_NAVER_KEY')
 SOCIAL_AUTH_NAVER_SECRET = os.getenv('SOCIAL_AUTH_NAVER_SECRET')
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+    'core.pipeline.social_auth.update_extra',
+)
 
 ROOT_URLCONF = 'main.urls'
 

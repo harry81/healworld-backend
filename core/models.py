@@ -23,10 +23,13 @@ class User(AbstractUser):
     name = models.CharField(max_length=100, blank=True, null=True)
     notification_push = models.CharField(max_length=512, blank=True,
                                          null=True, default=True)
+
     profile_picture = VersatileImageField('User Profile',
                                           blank=True,
                                           null=True,
                                           upload_to='user_profile/')
+    profile_picture_url = models.CharField(max_length=512, blank=True,
+                                           null=True, default='')
 
     def send_push_notification(self):
         if self.notification_push is not None:
@@ -43,10 +46,7 @@ class User(AbstractUser):
 
             req = requests.post(url, data=json.dumps(payload), headers=headers)
 
-            print 'send-push', self.notification_push
-
-    @property
-    def profile_picture_url(self):
+    def update_picture_url(self):
         image_url = '/assets/imgs/person.png'
 
         if self.profile_picture.name == '':
@@ -55,10 +55,17 @@ class User(AbstractUser):
                 if social.provider == 'facebook':
                     image_url = 'https://graph.facebook.com/%s/picture/'\
                                 % social.uid
+                elif social.provider == 'kakao':
+                    res = requests.get('https://kapi.kakao.com/v1/api/talk/profile',
+                                       headers={'Authorization': 'Bearer %s' % social.access_token})
+                    res_json = json.loads(res.content)
+                    image_url = res_json['thumbnailURL']
+
         else:
             image_url = self.profile_picture.thumbnail['50x50'].url
 
-        return image_url
+        self.profile_picture_url = image_url
+        self.save()
 
 class ItemManager(models.Manager):
     def get_queryset(self):
