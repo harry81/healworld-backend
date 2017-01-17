@@ -15,7 +15,7 @@ def send_email_healworld(self, comment):
         u'신규 댓글',
         comment.comment,
         'noreply@mail.healworld.co.kr',
-        ['chharry@gmail.com'],
+         [item.user.email],
         fail_silently=False,
     )
 
