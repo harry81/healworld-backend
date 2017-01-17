@@ -294,4 +294,5 @@ djcelery.setup_loader()
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'SEND_TEXT': (True, 'Send text message or not'),
+    'NOTIFICATION_HOW_LONG': (60, 'When the user is notified')
 }
