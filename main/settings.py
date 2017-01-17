@@ -83,11 +83,11 @@ MIDDLEWARE_CLASSES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
     'social.backends.kakao.KakaoOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.naver.NaverOAuth2',
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
 )
 
 EMAIL_USE_TLS = True
@@ -107,8 +107,9 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
   'fields': 'id, name, email, age_range'
 }
 
+SESSION_COOKIE_AGE =  60 * 60 * 24 * 365
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/get_token/'
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+# SOCIAL_AUTH_LOGIN_ERROR_URL = '/get_token/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_KAKAO_KEY = os.getenv('SOCIAL_AUTH_KAKAO_KEY')
@@ -218,6 +219,7 @@ AWS_QUERYSTRING_AUTH = False
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     'healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
     'www.healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
