@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'fsm_admin',
     'raven.contrib.django.raven_compat',
     'djcelery',
+    'constance',
+    'constance.backends.database',
 
     # private app
     'core',
@@ -283,5 +285,13 @@ try:
 except:
     pass
 
+### CELERY
 import djcelery
 djcelery.setup_loader()
+
+
+### CONSTANCE
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_CONFIG = {
+    'SEND_TEXT': (True, 'Send text message or not'),
+}

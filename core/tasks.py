@@ -3,6 +3,8 @@
 from main.celery_app import app as celery_app
 from django.core.mail import send_mail
 from core.sendsms import send_text
+from constance import config
+
 
 
 @celery_app.task(bind=True)
@@ -24,4 +26,13 @@ def send_text_healworld(self, comment):
     sender = '01064117846'
     receivers = ['01064117846', ]
 
-    response = send_text(sender, receivers, comment.comment)
+    if config.SEND_TEXT:
+        response = send_text(sender, receivers, comment.comment)
+    else:
+        send_mail(
+            u'신규 댓글',
+            u'SEND_TEXT 비활성화로 문자 대신 메일로 전송',
+            'noreply@mail.healworld.co.kr',
+            ['chharry@gmail.com'],
+            fail_silently=False,
+        )
