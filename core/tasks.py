@@ -12,7 +12,7 @@ def send_email_healworld(self, comment):
         id=comment.object_pk)
 
     send_mail(
-        u'신규 댓글',
+        u'[Healworld]댓글입니다',
         comment.comment,
         'noreply@mail.healworld.co.kr',
          [item.user.email],
