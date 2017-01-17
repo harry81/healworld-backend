@@ -70,7 +70,7 @@ class ItemSerializer(GeoFeatureModelSerializer):
     cnt_of_comments = serializers.SerializerMethodField()
 
     def get_image(self, obj):
-        image = obj.images.all().order_by('created_at').first()
+        image = obj.images.all().order_by('id').first()
 
         if image:
             rlt = ImageSerializer(image).data['itemshot']['crop__400x400']
