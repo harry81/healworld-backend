@@ -2,7 +2,7 @@
 
 from main.celery_app import app as celery_app
 from django.core.mail import send_mail
-from core.sendsms import send_sms
+from core.sendsms import send_text
 
 
 @celery_app.task(bind=True)
@@ -20,8 +20,8 @@ def send_email_healworld(self, comment):
     )
 
 @celery_app.task(bind=True)
-def send_sms_healworld(self, comment):
+def send_text_healworld(self, comment):
     sender = '01064117846'
     receivers = ['01064117846', ]
 
-    send_sms(sender, receivers, comment.comment)
+    response = send_text(sender, receivers, comment.comment)

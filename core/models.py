@@ -16,7 +16,7 @@ from django_comments.models import Comment
 from django_fsm import FSMField, transition
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from django.utils.translation import ugettext_lazy as _
-from .tasks import send_email_healworld, send_sms_healworld
+from .tasks import send_email_healworld, send_text_healworld
 
 
 class User(AbstractUser):
@@ -144,4 +144,4 @@ def send_notification(sender, **kwargs):
         user.send_push_notification()
 
     send_email_healworld.apply_async((comment,), countdown=60)
-    # send_sms_healworld.apply_async((comment,), countdown=1)
+    # send_text_healworld.apply_async((comment,), countdown=1)

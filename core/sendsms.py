@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-
 import base64
 import httplib
 import json
@@ -11,19 +9,18 @@ appid = settings.SMS_APPID
 apikey = settings.SMS_APIKEY
 address = 'api.bluehouselab.com'
 
-
 credential = "Basic "+base64.encodestring(appid+':'+apikey).strip()
 headers = {
   "Content-type": "application/json;charset=utf-8",
   "Authorization": credential,
 }
 
-
 c = httplib.HTTPSConnection(address)
 
-path = "/smscenter/v1.0/sendlms"
+path = "/smscenter/v1.0/send%s"
 
-def send_sms(sender, receivers, content):
+
+def send_text(sender, receivers, content):
     value = {
         'sender'     : sender,
         'receivers'  : receivers,
@@ -33,8 +30,6 @@ def send_sms(sender, receivers, content):
 
     data = json.dumps(value, ensure_ascii=False).encode('utf-8')
 
-    c.request("POST", path, data, headers)
-    r = c.getresponse()
-
-# print r.status, r.reason
-# print r.read()
+    c.request("POST", path % 'sms', data, headers)
+    ret = c.getresponse()
+    return ret
