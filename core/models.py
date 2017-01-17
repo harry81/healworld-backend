@@ -33,7 +33,6 @@ class User(AbstractUser):
     phone = models.CharField(max_length=32, blank=True,
                              null=True, default=None)
 
-
     def send_push_notification(self):
         if self.notification_push is not None:
 
@@ -59,8 +58,10 @@ class User(AbstractUser):
                     image_url = 'https://graph.facebook.com/%s/picture/'\
                                 % social.uid
                 elif social.provider == 'kakao':
-                    res = requests.get('https://kapi.kakao.com/v1/api/talk/profile',
-                                       headers={'Authorization': 'Bearer %s' % social.access_token})
+                    res = requests.get(
+                        'https://kapi.kakao.com/v1/api/talk/profile',
+                        headers={'Authorization': 'Bearer %s'
+                                 % social.access_token})
                     res_json = json.loads(res.content)
                     image_url = res_json['thumbnailURL']
 
@@ -69,6 +70,7 @@ class User(AbstractUser):
 
         self.profile_picture_url = image_url
         self.save()
+
 
 class ItemManager(models.Manager):
     def get_queryset(self):
@@ -87,7 +89,7 @@ class Item(models.Model):
     address = models.CharField(max_length=256, blank=True, null=True)
     state = FSMField(default='created', protected=True)
     deleted = models.BooleanField(default=False)
-    objects = models.Manager() # The default manager.
+    objects = models.Manager()
     live_objects = ItemManager()
 
     def __unicode__(self):

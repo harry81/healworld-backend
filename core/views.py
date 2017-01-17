@@ -142,7 +142,7 @@ class ProfileAPIView(viewsets.ModelViewSet):
     def logout(self, request):
         request.session.flush()
         logout(request)
-        return Response({'logout':"ok"}, status=status.HTTP_200_OK)
+        return Response({'logout': "ok"}, status=status.HTTP_200_OK)
 
     def patch(self, request):
         data_obj = json.loads(json.dumps(request.data))

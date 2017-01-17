@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-
 from main.celery_app import app as celery_app
 from django.core.mail import send_mail
 from core.sendsms import send_text
 from constance import config
-
 
 
 @celery_app.task(bind=True)
@@ -20,6 +18,7 @@ def send_email_healworld(self, comment):
         ['chharry@gmail.com'],
         fail_silently=False,
     )
+
 
 @celery_app.task(bind=True)
 def send_text_healworld(self, comment):
