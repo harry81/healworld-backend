@@ -15,7 +15,7 @@ def send_email_healworld(self, comment):
         u'[Healworld] 댓글입니다 %s' % item.title,
         comment.comment,
         'noreply@mail.healworld.co.kr',
-         [item.user.email],
+        [item.user.email],
         fail_silently=False,
     )
 
@@ -26,7 +26,7 @@ def send_text_healworld(self, comment):
     receivers = ['01064117846', ]
 
     if config.SEND_TEXT:
-        response = send_text(sender, receivers, comment.comment)
+        send_text(sender, receivers, comment.comment)
     else:
         send_mail(
             u'[Healworld] 댓글입니다, SEND_TEXT 비활성화',
