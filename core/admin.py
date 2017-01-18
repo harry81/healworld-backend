@@ -1,6 +1,15 @@
 from django.contrib import admin
+from django_comments.admin import CommentsAdmin
+from django_comments.models import Comment
 from core.models import User, Item, Image
 from fsm_admin.mixins import FSMTransitionMixin
+
+
+class CommentCoreAdmin(CommentsAdmin):
+    list_display = ('comment',) + CommentsAdmin.list_display
+
+admin.site.unregister(Comment)
+admin.site.register(Comment, CommentCoreAdmin)
 
 
 class UserAdmin(admin.ModelAdmin):
