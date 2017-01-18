@@ -29,6 +29,12 @@ class ImageInline(admin.TabularInline):
     extra = 1
 
 
+def mark_deleted(modeladmin, request, queryset):
+    queryset.update(deleted=True)
+
+mark_deleted.short_description = "Mark as deleted"
+
+
 class ItemAdmin(FSMTransitionMixin, admin.ModelAdmin):
     inlines = (ImageInline, )
     list_display = ("image_tag", "user", 'state', "title",
@@ -36,6 +42,7 @@ class ItemAdmin(FSMTransitionMixin, admin.ModelAdmin):
     fields = ("title", "memo", "user", "price", 'deleted')
     list_filter = ('state', 'deleted')
     fsm_field = ['state', ]
+    actions = [mark_deleted]
 
     def image_tag(self, instance):
         try:
