@@ -34,9 +34,10 @@ URL='%s://%s'\" />" % (request.META['wsgi.url_scheme'],
 
     payload = jwt_payload_handler(user)
     token = jwt_encode_handler(payload)
-    max_age = 365 * 24 * 60 * 60  # one year
+
     expires = datetime.datetime.strftime(
-        datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age),
+        datetime.datetime.utcnow() +
+        datetime.timedelta(seconds=settings.SESSION_COOKIE_AGE),
         "%a, %d-%b-%Y %H:%M:%S GMT")
 
     response.set_cookie('jwt_token', token,
