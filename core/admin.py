@@ -13,10 +13,20 @@ admin.site.register(Comment, CommentCoreAdmin)
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "profile_picture", "notification")
+    list_display = ("profile_picture_url_tag", "username",
+                    "profile_picture", "notification")
+
+    def profile_picture_url_tag(self, instance):
+        image = instance.profile_picture_url
+        url = "<img src=%s width='40px'>" % image
+        return url
+
+    profile_picture_url_tag.short_description = 'Profile picture'
+    profile_picture_url_tag.allow_tags = True
 
     def notification(self, instance):
-        return True if instance.notification_push else ''
+        return instance.notification_push[0:10]\
+            if instance.notification_push else ''
 
     model = User
 
