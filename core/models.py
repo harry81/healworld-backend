@@ -101,7 +101,8 @@ class Item(models.Model):
             object_pk=self.pk)
         users = set([
             ele.user.id for ele in comments.exclude(
-                user=None).distinct()])
+                user=None).exclude(user=self.user).distinct()])
+
         return User.objects.filter(id__in=users)
 
     @transition(field=state, source=['created', 'ongoing'],
@@ -135,7 +136,6 @@ class Image(models.Model):
 
 @receiver(post_save, sender=Comment)
 def send_notification(sender, instance, created, **kwargs):
-
     if not created:  # do nothing if it's not new comment
         return
 

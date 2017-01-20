@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import base64
-import httplib
 import json
+import requests
 
 from django.conf import settings
 
@@ -15,21 +15,15 @@ headers = {
     "Authorization": credential,
 }
 
-c = httplib.HTTPSConnection(address)
-
-path = "/smscenter/v1.0/send%s"
+url = 'https://api.bluehouselab.com/smscenter/v1.0/sendsms'
 
 
 def send_text(sender, receivers, content):
-    value = {
+    headers = {'Content-type': 'application/json; charset=utf-8'}
+    params = {
         'sender': sender,
         'receivers': receivers,
-        'subject': u'LMS 제목',
         'content': content,
     }
-
-    data = json.dumps(value, ensure_ascii=False).encode('utf-8')
-
-    c.request("POST", path % 'sms', data, headers)
-    ret = c.getresponse()
-    return ret
+    requests.post(url, data=json.dumps(params),
+                  auth=(appid, apikey), headers=headers)

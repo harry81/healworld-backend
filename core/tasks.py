@@ -25,15 +25,17 @@ def send_text_healworld(self, item, comment):
     message = u"[HealWorld]신규 댓글-'%s' - %s" % (
         item.title[:20], comment.comment[0:20])
 
-    for user in item.get_comment_users():
-        if config.SEND_TEXT and user.phone:
-            send_text(sender, [user.phone, ], message)
+    phones = list(set([user.phone for user in item.get_comment_users()]))
 
-        else:
-            send_mail(
-                u"[HealWorld]SEND_TEXT 비활성화 %s" % item.title,
-                u"%s" % message,
-                'noreply@mail.healworld.co.kr',
-                ['chharry@gmail.com', ],
-                fail_silently=False,
-            )
+    if config.SEND_TEXT:
+        send_text(sender, phones, message)
+
+    else:
+        print 'send_main', user
+        send_mail(
+            u"[HealWorld]SEND_TEXT 비활성화 %s" % item.title,
+            u"%s to %s" % (message, phones),
+            'noreply@mail.healworld.co.kr',
+            ['chharry@gmail.com', ],
+            fail_silently=False,
+        )
