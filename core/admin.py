@@ -8,12 +8,14 @@ from fsm_admin.mixins import FSMTransitionMixin
 class CommentCoreAdmin(CommentsAdmin):
     list_display = ('comment',) + CommentsAdmin.list_display
 
+
 admin.site.unregister(Comment)
 admin.site.register(Comment, CommentCoreAdmin)
 
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ("profile_picture_url_tag", "username",
+                    "last_login",
                     "profile_picture", "notification")
 
     def profile_picture_url_tag(self, instance):

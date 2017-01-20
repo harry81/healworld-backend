@@ -17,6 +17,7 @@ from versatileimagefield.fields import VersatileImageField, PPOIField
 from django.utils.translation import ugettext_lazy as _
 from constance import config
 from .tasks import send_email_healworld, send_text_healworld
+from .utils import time_to_send_text
 
 
 class User(AbstractUser):
@@ -140,12 +141,11 @@ def send_notification(sender, **kwargs):
     item = comment.content_type.get_all_objects_for_this_type().get(
         id=comment.object_pk)
     users = item.get_comment_users()
-    print 'debug_task()'
 
     for user in User.objects.filter(id__in=users).exclude(id=comment.user.id):
         user.send_push_notification()
 
-    send_email_healworld.apply_async((comment,),
-                                     countdown=config.NOTIFICATION_HOW_LONG)
-    send_text_healworld.apply_async((comment,),
-                                    countdown=config.NOTIFICATION_HOW_LONG)
+    eta = time_to_send_text()
+
+    send_email_healworld.apply_async((comment,), eta=eta)
+    send_text_healworld.apply_async((comment,), eta=eta)
