@@ -134,8 +134,12 @@ class Image(models.Model):
 
 
 @receiver(post_save, sender=Comment)
-def send_notification(sender, **kwargs):
-    comment = kwargs.get('instance')
+def send_notification(sender, instance, created, **kwargs):
+
+    if not created:  # do nothing if it's not new comment
+        return
+
+    comment = instance
 
     item = comment.content_type.get_all_objects_for_this_type().get(
         id=comment.object_pk)
