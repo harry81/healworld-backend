@@ -5,35 +5,35 @@ from core.sendsms import send_text
 from constance import config
 
 
-@celery_app.task(bind=True)
-def send_email_healworld(self, comment):
+# @celery_app.task(bind=True)
+# def send_email_healworld(self, item_title, comment):
 
-    item = comment.content_type.get_all_objects_for_this_type().get(
-        id=comment.object_pk)
-
-    send_mail(
-        u'[Healworld] 댓글입니다 %s' % item.title,
-        comment.comment,
-        'noreply@mail.healworld.co.kr',
-        [item.user.email],
-        fail_silently=False,
-    )
+#     send_mail(
+#         u'[Healworld] 댓글입니다 %s' % item_title,
+#         comment,
+#         'noreply@mail.healworld.co.kr',
+#         ['chharry@gmail.com',],
+#         # [item.user.email],
+#         fail_silently=False,
+#     )
 
 
 @celery_app.task(bind=True)
-def send_text_healworld(self, comment):
+def send_text_healworld(self, item, comment):
     sender = '01064117846'
-    receivers = ['01064117846', ]
-    # from celery.contrib import rdb; rdb.set_trace()
 
-    if config.SEND_TEXT:
-        send_text(sender, receivers, comment.comment)
+    message = u"[HealWorld]신규 댓글-'%s' - %s" % (
+        item.title[:20], comment.comment[0:20])
 
-    else:
-        send_mail(
-            u'[Healworld] 댓글입니다, SEND_TEXT 비활성화',
-            u'SEND_TEXT 비활성화로 문자 대신 메일로 전송 ' + comment.comment,
-            'noreply@mail.healworld.co.kr',
-            ['chharry@gmail.com'],
-            fail_silently=False,
-        )
+    for user in item.get_comment_users():
+        if config.SEND_TEXT and user.phone:
+            send_text(sender, [user.phone, ], message)
+
+        else:
+            send_mail(
+                u"[HealWorld]SEND_TEXT 비활성화 %s" % item.title,
+                u"%s" % message,
+                'noreply@mail.healworld.co.kr',
+                ['chharry@gmail.com', ],
+                fail_silently=False,
+            )

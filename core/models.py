@@ -15,8 +15,7 @@ from django_comments.models import Comment
 from django_fsm import FSMField, transition
 from versatileimagefield.fields import VersatileImageField, PPOIField
 from django.utils.translation import ugettext_lazy as _
-from constance import config
-from .tasks import send_email_healworld, send_text_healworld
+from .tasks import send_text_healworld
 from .utils import time_to_send_text
 
 
@@ -103,7 +102,7 @@ class Item(models.Model):
         users = set([
             ele.user.id for ele in comments.exclude(
                 user=None).distinct()])
-        return users
+        return User.objects.filter(id__in=users)
 
     @transition(field=state, source=['created', 'ongoing'],
                 target='completed', custom=dict(admin=True))
@@ -147,5 +146,9 @@ def send_notification(sender, **kwargs):
 
     eta = time_to_send_text()
 
-    send_email_healworld.apply_async((comment,), eta=eta)
-    send_text_healworld.apply_async((comment,), eta=eta)
+    item = comment.content_type.get_all_objects_for_this_type().get(
+        id=comment.object_pk)
+
+
+    # send_email_healworld.apply_async((comment,), eta=eta)
+    send_text_healworld.apply_async((item, comment,), eta=eta)
