@@ -101,7 +101,7 @@ class Item(models.Model):
             object_pk=self.pk)
         users = set([
             ele.user.id for ele in comments.exclude(
-                user=None).exclude(user=self.user).distinct()])
+                user=None).distinct()])
 
         return User.objects.filter(id__in=users)
 

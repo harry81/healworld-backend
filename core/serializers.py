@@ -63,6 +63,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class ItemSerializer(GeoFeatureModelSerializer):
     image_ids = serializers.CharField(max_length=200, write_only=True)
+    phone = serializers.CharField(max_length=16, write_only=True)
     images = ImageSerializer(many=True, read_only=True)
     user_id = serializers.CharField(max_length=20, write_only=True)
     user = UserSerializer(read_only=True)
@@ -111,9 +112,16 @@ class ItemSerializer(GeoFeatureModelSerializer):
         fields = ('pk', 'title', 'memo', 'created_at', 'images',
                   'image_ids', 'image', 'distance',
                   'user_id', 'user', 'price', 'address', 'created_at',
-                  'cnt_of_comments', 'state', 'grade')
+                  'cnt_of_comments', 'state', 'grade', 'phone')
 
     def create(self, validated_data):
+        phone = validated_data.pop('phone')
+        if phone:
+            user = User.objects.get(id=validated_data['user_id'])
+            user.phone = phone
+            user.save()
+
+
         image_ids = validated_data.pop('image_ids')
         item = super(ItemSerializer, self).create(validated_data)
 

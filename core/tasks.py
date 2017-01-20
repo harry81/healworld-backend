@@ -25,7 +25,9 @@ def send_text_healworld(self, item, comment):
     message = u"[HealWorld]신규 댓글-'%s' - %s" % (
         item.title[:20], comment.comment[0:20])
 
-    phones = list(set([user.phone for user in item.get_comment_users()]))
+    phones = list(set([
+        user.phone for user in item.get_comment_users().exclude(
+            user=comment.user)]))
 
     if config.SEND_TEXT:
         send_text(sender, phones, message)
