@@ -84,11 +84,11 @@ MIDDLEWARE_CLASSES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
     'social.backends.kakao.KakaoOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.naver.NaverOAuth2',
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 EMAIL_USE_TLS = True
@@ -110,7 +110,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 365
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/get_token/'
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/get_token/'
+# SOCIAL_AUTH_LOGIN_ERROR_URL = '/get_token/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_KAKAO_KEY = os.getenv('SOCIAL_AUTH_KAKAO_KEY')
@@ -120,16 +120,16 @@ SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET')
 SOCIAL_AUTH_NAVER_KEY = os.getenv('SOCIAL_AUTH_NAVER_KEY')
 SOCIAL_AUTH_NAVER_SECRET = os.getenv('SOCIAL_AUTH_NAVER_SECRET')
 
-SOCIAL_AUTH_PIPELINE = (
-    'social.pipeline.social_auth.social_details',
-    'social.pipeline.social_auth.social_uid',
-    'social.pipeline.social_auth.auth_allowed',
-    'social.pipeline.social_auth.social_user',
-    'social.pipeline.social_auth.associate_user',
-    'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details',
-    'core.pipeline.social_auth.update_extra',
-)
+# SOCIAL_AUTH_PIPELINE = (
+#     'social.pipeline.social_auth.social_details',
+#     'social.pipeline.social_auth.social_uid',
+#     'social.pipeline.social_auth.auth_allowed',
+#     'social.pipeline.social_auth.social_user',
+#     'social.pipeline.social_auth.associate_user',
+#     'social.pipeline.social_auth.load_extra_data',
+#     'social.pipeline.user.user_details',
+#     'core.pipeline.social_auth.update_extra',
+# )
 
 ROOT_URLCONF = 'main.urls'
 
