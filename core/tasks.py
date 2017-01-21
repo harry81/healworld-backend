@@ -27,13 +27,12 @@ def send_text_healworld(self, item, comment):
 
     phones = list(set([
         user.phone for user in item.get_comment_users().exclude(
-            user=comment.user)]))
+            id=comment.user.id)]))
 
     if config.SEND_TEXT:
         send_text(sender, phones, message)
 
     else:
-        print 'send_main', user
         send_mail(
             u"[HealWorld]SEND_TEXT 비활성화 %s" % item.title,
             u"%s to %s" % (message, phones),
