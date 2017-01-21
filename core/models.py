@@ -71,6 +71,9 @@ class User(AbstractUser):
         self.profile_picture_url = image_url
         self.save()
 
+    def __unicode__(self):
+        return u'%s' % (self.username)
+
 
 class ItemManager(models.Manager):
     def get_queryset(self):
@@ -93,7 +96,7 @@ class Item(models.Model):
     live_objects = ItemManager()
 
     def __unicode__(self):
-        return u'%s - %s' % (self.user, self.memo)
+        return u'%s' % (self.title)
 
     def get_comment_users(self):
         comments = Comment.objects.filter(
@@ -152,7 +155,6 @@ def send_notification(sender, instance, created, **kwargs):
 
     item = comment.content_type.get_all_objects_for_this_type().get(
         id=comment.object_pk)
-
 
     # send_email_healworld.apply_async((comment,), eta=eta)
     send_text_healworld.apply_async((item, comment,), eta=eta)

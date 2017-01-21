@@ -6,6 +6,7 @@ from django.contrib.gis.measure import D
 
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from actstream import action
 from versatileimagefield.serializers import VersatileImageFieldSerializer
 from core.models import User, Item, Image
 from social.apps.django_app.default.models import UserSocialAuth
@@ -63,7 +64,6 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class ItemSerializer(GeoFeatureModelSerializer):
     image_ids = serializers.CharField(max_length=200, write_only=True)
-    phone = serializers.CharField(max_length=16, write_only=True)
     images = ImageSerializer(many=True, read_only=True)
     user_id = serializers.CharField(max_length=20, write_only=True)
     user = UserSerializer(read_only=True)
@@ -114,15 +114,9 @@ class ItemSerializer(GeoFeatureModelSerializer):
         fields = ('pk', 'title', 'memo', 'created_at', 'images',
                   'image_ids', 'image', 'distance',
                   'user_id', 'user', 'price', 'address', 'created_at',
-                  'cnt_of_comments', 'state', 'grade', 'phone')
+                  'cnt_of_comments', 'state', 'grade')
 
     def create(self, validated_data):
-        phone = validated_data.pop('phone')
-        if phone:
-            user = User.objects.get(id=validated_data['user_id'])
-            user.phone = phone
-            user.save()
-
         image_ids = validated_data.pop('image_ids')
         item = super(ItemSerializer, self).create(validated_data)
 
@@ -134,6 +128,7 @@ class ItemSerializer(GeoFeatureModelSerializer):
             except ObjectDoesNotExist:
                 pass
 
+        action.send(item.user, verb='created', target=item)
         return item
 
 

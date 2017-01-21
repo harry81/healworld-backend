@@ -3,6 +3,7 @@ from main.celery_app import app as celery_app
 from django.core.mail import send_mail
 from core.sendsms import send_text
 from constance import config
+from actstream import action
 
 
 # @celery_app.task(bind=True)
@@ -40,3 +41,9 @@ def send_text_healworld(self, item, comment):
             ['chharry@gmail.com', ],
             fail_silently=False,
         )
+
+    message_type = 'text' if config.SEND_TEXT else 'email'
+    action.send(comment.user,
+                verb='sent message via %s' % message_type,
+                target=comment,
+                message=message)

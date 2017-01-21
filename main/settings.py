@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'djcelery',
     'constance',
     'constance.backends.database',
+    'actstream',
 
     # private app
     'core',
@@ -286,6 +287,14 @@ try:
     from settings_local import *
 except:
     pass
+
+### ACTSTREAM
+ACTSTREAM_SETTINGS = {
+    'FETCH_RELATIONS': True,
+    'USE_PREFETCH': True,
+    'USE_JSONFIELD': True,
+    'GFK_FETCH_DEPTH': 1,
+}
 
 ### CELERY
 import djcelery
