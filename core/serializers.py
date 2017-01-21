@@ -97,6 +97,8 @@ class ItemSerializer(GeoFeatureModelSerializer):
                 point = GEOSGeometry('POINT(%s)' %
                                      request.GET[key[0]].replace(",", " "))
                 dist = D(km=obj.point.distance(point) * 100)
+            else:
+                return ''
         except:
             return dist
 
@@ -120,7 +122,6 @@ class ItemSerializer(GeoFeatureModelSerializer):
             user = User.objects.get(id=validated_data['user_id'])
             user.phone = phone
             user.save()
-
 
         image_ids = validated_data.pop('image_ids')
         item = super(ItemSerializer, self).create(validated_data)
