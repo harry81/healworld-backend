@@ -54,9 +54,11 @@ class User(AbstractUser):
         if self.profile_picture.name == '':
             if self.social_auth.all().exists():
                 social = self.social_auth.all()[0]
+
                 if social.provider == 'facebook':
                     image_url = 'https://graph.facebook.com/%s/picture/'\
                                 % social.uid
+
                 elif social.provider == 'kakao':
                     res = requests.get(
                         'https://kapi.kakao.com/v1/api/talk/profile',
@@ -64,6 +66,17 @@ class User(AbstractUser):
                                  % social.access_token})
                     res_json = json.loads(res.content)
                     image_url = res_json['thumbnailURL']
+
+                elif social.provider == 'naver':
+                    res = requests.get(
+                        'https://openapi.naver.com/v1/nid/me',
+                        headers={'Authorization': 'Bearer %s'
+                                 % social.access_token})
+                    res_json = json.loads(res.content)
+                    image_url = res_json['response']['profile_image']
+
+                    social.extra_data['respose'] = res_json['response']
+                    social.save()
 
         else:
             image_url = self.profile_picture.thumbnail['50x50'].url
