@@ -1,0 +1,179 @@
+[
+  {
+    "fields": {
+      "user_permissions": [],
+      "groups": [],
+      "phone": "01064117846",
+      "profile_picture_url": "https:\/\/ssl.pstatic.net\/static\/pwe\/address\/nodata_33x33.gif",
+      "profile_picture": "",
+      "notification_push": "fWcBCDe6kzE:APA91bFPXNHs02wJ6RPkro48WC6K7JXfrmikVaSNh2y1aG737yuUEASITDDG-VRIs_uC9JZDSR0sXuJW3_f-iZv51kEm3hcoUhfnWndt0AIJzF5du5kYA9qvNztazNiEHacRaB343ASA",
+      "name": null,
+      "date_joined": "2016-12-20T04:49:24.052Z",
+      "is_active": true,
+      "is_staff": false,
+      "email": "n_pointer@naver.com",
+      "last_name": "",
+      "first_name": "",
+      "username": "\ucd5c\ud604\ubbfc",
+      "is_superuser": false,
+      "last_login": "2017-01-22T03:35:07.308Z",
+      "password": "!ba67B0kf8mTuJDXptTfK1ugXGSFQMJHhDEXxHlQO"
+    },
+    "pk": 22,
+    "model": "core.user"
+  },
+  {
+    "fields": {
+      "user_permissions": [],
+      "groups": [],
+      "phone": "01023493873",
+      "profile_picture_url": "https:\/\/graph.facebook.com\/1161258343990214\/picture\/",
+      "profile_picture": "",
+      "notification_push": "",
+      "name": null,
+      "date_joined": "2016-12-20T04:50:49.462Z",
+      "is_active": true,
+      "is_staff": false,
+      "email": "chharry@gmail.com",
+      "last_name": "Choi",
+      "first_name": "Harry",
+      "username": "HarryChoi",
+      "is_superuser": false,
+      "last_login": "2017-01-20T07:37:36.062Z",
+      "password": "!Rg27EkTz8KaQjFzb3HIWteq2qYnc1xuLXZNemAHE"
+    },
+    "pk": 23,
+    "model": "core.user"
+  },
+  {
+    "fields": {
+      "user_permissions": [],
+      "groups": [],
+      "phone": "0106411784",
+      "profile_picture_url": "https:\/\/graph.facebook.com\/10210643309254585\/picture\/",
+      "profile_picture": "",
+      "notification_push": "eOvhW-94PcY:APA91bHmfnl68NR-tfjrxNnE-0gD3bGohiRHOxC5haVaN9Q4EwFcpmG9lNvKY9g4117oiNp6tVi2JjhbVNiyMpI0OmFGMIw03FJ-5VOwiE4wtMEKxTAbyDOPd5fjuJU_MtBMZ5OMpTEF",
+      "name": "",
+      "date_joined": "2016-12-20T08:10:45Z",
+      "is_active": true,
+      "is_staff": false,
+      "email": "pointer81@gmail.com",
+      "last_name": "Choi",
+      "first_name": "Hyun-min",
+      "username": "Hyun-minChoif6",
+      "is_superuser": false,
+      "last_login": "2017-01-22T03:33:06.706Z",
+      "password": "!hsmUoF4oGIRn9Vk2kGq9HkDF9pYHGtEW80GK3V6M"
+    },
+    "pk": 24,
+    "model": "core.user"
+  },
+  {
+    "fields": {
+      "user_permissions": [],
+      "groups": [],
+      "phone": "01064117846",
+      "profile_picture_url": "\/assets\/imgs\/person.png",
+      "profile_picture": "",
+      "notification_push": "True",
+      "name": null,
+      "date_joined": "2017-01-12T14:03:26.328Z",
+      "is_active": true,
+      "is_staff": false,
+      "email": "n_pointer1@naver.com",
+      "last_name": "",
+      "first_name": "",
+      "username": "\ucd5c\ud604\ubbfc915e9184282c42ea",
+      "is_superuser": false,
+      "last_login": "2017-01-12T14:03:26.371Z",
+      "password": "!UU9aEhKq7JAEp6Xi5JSE8Md4U4ofhrV8htzAmO2Q"
+    },
+    "pk": 35,
+    "model": "core.user"
+  },
+  {
+    "fields": {
+      "user_permissions": [],
+      "groups": [],
+      "phone": "01064117846",
+      "profile_picture_url": "http:\/\/th-p.talk.kakao.co.kr\/th\/talkp\/wkgEIgf3fT\/RwqIC7Xc6KyxWSyg1ctPN0\/ikijen_110x110_c.jpg",
+      "profile_picture": "",
+      "notification_push": "True",
+      "name": null,
+      "date_joined": "2017-01-21T10:26:12.548Z",
+      "is_active": true,
+      "is_staff": false,
+      "email": "",
+      "last_name": "",
+      "first_name": "",
+      "username": "\ud604\ubbfc64c64f4f69e54270",
+      "is_superuser": false,
+      "last_login": "2017-01-22T03:33:29.026Z",
+      "password": "!yLQxPMUfittM4VvZsg2t5LUOvO5DkA0KhfbcJ6jS"
+    },
+    "pk": 37,
+    "model": "core.user"
+  },
+  {
+    "fields": {
+      "deleted": true,
+      "state": "created",
+      "address": "\uad6c\ubbf8\uc2dc \uacbd\uc740\ub85c",
+      "created_at": "2017-01-21T03:59:09.870Z",
+      "point": "SRID=4326;POINT (128.3364665000000002 36.1137362999999993)",
+      "grade": 3,
+      "price": 10,
+      "user": 24,
+      "memo": "2",
+      "title": "11"
+    },
+    "pk": 222,
+    "model": "core.item"
+  },
+  {
+    "fields": {
+      "deleted": true,
+      "state": "created",
+      "address": "\uad6c\ubbf8\uc2dc \uacbd\uc740\ub85c",
+      "created_at": "2017-01-21T08:07:32.747Z",
+      "point": "SRID=4326;POINT (128.3364181000000031 36.1135085000000018)",
+      "grade": 3,
+      "price": 200,
+      "user": 24,
+      "memo": "\uc911\uad6d\uc0b0\uc911\uad6d\uc0b0",
+      "title": "\uc544\uc774\ud3f0"
+    },
+    "pk": 226,
+    "model": "core.item"
+  },
+  {
+    "fields": {
+      "created_at": "2016-11-26T07:03:29.813Z",
+      "item_ppoi": "0.5x0.5",
+      "itemshot": "items\/Selection_009.png",
+      "item": null
+    },
+    "pk": 1,
+    "model": "core.image"
+  },
+  {
+    "fields": {
+      "created_at": "2016-11-26T07:48:40.410Z",
+      "item_ppoi": "0.5x0.5",
+      "itemshot": "items\/Selection_008.png",
+      "item": null
+    },
+    "pk": 7,
+    "model": "core.image"
+  },
+  {
+    "fields": {
+      "created_at": "2016-11-27T03:53:08.565Z",
+      "item_ppoi": "0.5x0.5",
+      "itemshot": "items\/Selection_009.png",
+      "item": null
+    },
+    "pk": 8,
+    "model": "core.image"
+  }
+]
