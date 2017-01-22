@@ -27,7 +27,8 @@ def send_text_healworld(self, item, comment):
         item.title[:20], comment.comment[0:20])
 
     phones = list(set([
-        user.phone for user in item.get_comment_users().exclude(
+        user.phone for user in item.get_comment_users(
+            include_item_user=True).exclude(
             id=comment.user.id)]))
 
     if config.SEND_TEXT:

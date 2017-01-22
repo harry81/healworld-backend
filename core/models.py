@@ -64,19 +64,23 @@ class User(AbstractUser):
                         'https://kapi.kakao.com/v1/api/talk/profile',
                         headers={'Authorization': 'Bearer %s'
                                  % social.access_token})
-                    res_json = json.loads(res.content)
-                    image_url = res_json['thumbnailURL']
+
+                    if res.status_code == requests.codes.ok:
+                        res_json = json.loads(res.content)
+                        image_url = res_json['thumbnailURL']
 
                 elif social.provider == 'naver':
                     res = requests.get(
                         'https://openapi.naver.com/v1/nid/me',
                         headers={'Authorization': 'Bearer %s'
                                  % social.access_token})
-                    res_json = json.loads(res.content)
-                    image_url = res_json['response']['profile_image']
 
-                    social.extra_data['respose'] = res_json['response']
-                    social.save()
+                    if res.status_code == requests.codes.ok:
+                        res_json = json.loads(res.content)
+                        image_url = res_json['response']['profile_image']
+
+                        social.extra_data['respose'] = res_json['response']
+                        social.save()
 
         else:
             image_url = self.profile_picture.thumbnail['50x50'].url
@@ -111,13 +115,16 @@ class Item(models.Model):
     def __unicode__(self):
         return u'%s' % (self.title)
 
-    def get_comment_users(self):
+    def get_comment_users(self, include_item_user=False):
         comments = Comment.objects.filter(
             content_type=ContentType.objects.get(model='item'),
             object_pk=self.pk)
         users = set([
             ele.user.id for ele in comments.exclude(
                 user=None).distinct()])
+
+        if include_item_user:
+            users.add(self.id)
 
         return User.objects.filter(id__in=users)
 
