@@ -28,4 +28,4 @@ def send_text(sender, receivers, content):
 
     response = requests.post(url, data=json.dumps(params),
                              auth=(appid, apikey), headers=headers)
-    print response
+    return response

@@ -33,10 +33,10 @@ def send_text_healworld(self, item, comment):
             id=comment.user.id)]))
 
     if config.SEND_TEXT:
-        send_text(sender, phones, message)
+        result = send_text(sender, phones, message)
 
     else:
-        send_mail(
+        result = send_mail(
             u"[HealWorld]SEND_TEXT 비활성화 %s" % item.title,
             u"%s to %s" % (message, phones),
             'noreply@mail.healworld.co.kr',
@@ -48,4 +48,5 @@ def send_text_healworld(self, item, comment):
     action.send(comment.user,
                 verb='sent message via %s' % message_type,
                 target=comment,
-                message=message)
+                message=message,
+                result=result)
