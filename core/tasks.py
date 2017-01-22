@@ -23,8 +23,9 @@ from actstream import action
 def send_text_healworld(self, item, comment):
     sender = '01064117846'
 
-    message = u"[HealWorld]신규 댓글-'%s' - %s" % (
-        item.title[:20], comment.comment[0:20])
+    message = u"[HealWorld]신규 댓글-'%s' - %s %s" % (
+        item.title[:20], comment.comment[0:20],
+        "https://www.healworld.co.kr/#/detail/%s" % item.id)
 
     phones = list(set([
         user.phone for user in item.get_comment_users(

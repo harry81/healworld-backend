@@ -124,7 +124,7 @@ class Item(models.Model):
                 user=None).distinct()])
 
         if include_item_user:
-            users.add(self.id)
+            users.add(self.user.id)
 
         return User.objects.filter(id__in=users)
 
