@@ -32,17 +32,21 @@ URL='%s://%s'\" />" % (request.META['wsgi.url_scheme'],
 
     response = HttpResponse(html)
 
-    payload = jwt_payload_handler(user)
-    token = jwt_encode_handler(payload)
+    try:
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
 
-    expires = datetime.datetime.strftime(
-        datetime.datetime.utcnow() +
-        datetime.timedelta(seconds=settings.SESSION_COOKIE_AGE),
-        "%a, %d-%b-%Y %H:%M:%S GMT")
+        expires = datetime.datetime.strftime(
+            datetime.datetime.utcnow() +
+            datetime.timedelta(seconds=settings.SESSION_COOKIE_AGE),
+            "%a, %d-%b-%Y %H:%M:%S GMT")
 
-    response.set_cookie('jwt_token', token,
-                        domain=settings.SESSION_COOKIE_DOMAIN,
-                        expires=expires)
+        response.set_cookie('jwt_token', token,
+                            domain=settings.SESSION_COOKIE_DOMAIN,
+                            expires=expires)
+    except AttributeError:
+        pass
+
     return response
 
 
