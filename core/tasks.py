@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+import json
 from main.celery_app import app as celery_app
 from django.core.mail import send_mail
 from core.sendsms import send_text
 from constance import config
 from actstream import action
+from .utils import get_short_url
 
 
 # @celery_app.task(bind=True)
@@ -23,9 +25,11 @@ from actstream import action
 def send_text_healworld(self, item, comment):
     sender = '01064117846'
 
-    message = u"[HealWorld]신규 댓글-'%s' - %s %s" % (
-        item.title[:20], comment.comment[0:20],
-        "https://www.healworld.co.kr/#/detail/%s" % item.id)
+    message = u"[힐월드] '{comment}'\n\"{title}\"\n{url}".format(
+        comment=comment.comment[0:20],
+        title=item.title[:20],
+        url=get_short_url("https://www.healworld.co.kr/#/detail/%s" % item.id)
+    )
 
     phones = list(set([
         user.phone for user in item.get_comment_users(
@@ -33,7 +37,8 @@ def send_text_healworld(self, item, comment):
             id=comment.user.id)]))
 
     if config.SEND_TEXT:
-        result = send_text(sender, phones, message)
+        response = send_text(sender, phones, message)
+        result = json.dumps(response.text)
 
     else:
         result = send_mail(
@@ -45,6 +50,7 @@ def send_text_healworld(self, item, comment):
         )
 
     message_type = 'text' if config.SEND_TEXT else 'email'
+
     action.send(comment.user,
                 verb='sent message via %s' % message_type,
                 target=comment,
