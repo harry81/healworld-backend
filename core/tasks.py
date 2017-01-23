@@ -27,7 +27,7 @@ def send_text_healworld(self, item, comment):
 
     message = u"[힐월드] '{comment}'\n\"{title}\"\n{url}".format(
         comment=comment.comment[0:20],
-        title=item.title[:20],
+        title=item.title[:15],
         url=get_short_url("https://www.healworld.co.kr/#/detail/%s" % item.id)
     )
 
@@ -56,3 +56,4 @@ def send_text_healworld(self, item, comment):
                 target=comment,
                 message=message,
                 result=result)
+    return result
