@@ -137,6 +137,11 @@ class Item(models.Model):
     def going(self):
         pass
 
+    @transition(field=state, source=['created', 'ongoing', 'completed'],
+                target='deleted')
+    def delete(self):
+        pass
+
 
 class Image(models.Model):
     item = models.ForeignKey(Item,

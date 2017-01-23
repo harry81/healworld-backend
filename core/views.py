@@ -83,8 +83,8 @@ class ItemAPIView(viewsets.ModelViewSet):
     def state_action(self, request, pk):
         # TODO : check the permission
 
-        action = request.GET['action']
-        if action not in ['going', 'complete']:
+        action = request.data['action']
+        if action not in ['going', 'complete', 'delete']:
             return Response("Action [ %s ] not defined" % action,
                             status=status.HTTP_400_BAD_REQUEST)
 

@@ -51,7 +51,7 @@ class ItemAdmin(FSMTransitionMixin, admin.ModelAdmin):
     inlines = (ImageInline, )
     list_display = ("image_tag", "user", 'state', "title",
                     "memo", "address", "created_at")
-    fields = ("title", "memo", "user", "price", 'deleted')
+    fields = ("title", "memo", "user", "price", 'deleted', 'state')
     list_filter = ('state', 'deleted')
     fsm_field = ['state', ]
     actions = [mark_deleted]
