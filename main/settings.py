@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     #third party
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_gis',
     'django_filters',
     'versatileimagefield',
@@ -64,6 +65,10 @@ INSTALLED_APPS = [
     'constance',
     'constance.backends.database',
     'actstream',
+    'rest_auth',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
 
     # private app
     'core',
