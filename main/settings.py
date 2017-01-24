@@ -288,6 +288,10 @@ CELERY_QUEUES = {
     }
 }
 
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'core.serializers.RegisterSerializer'
+}
+
 REST_USE_JWT = True
 
 
