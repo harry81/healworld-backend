@@ -288,6 +288,9 @@ CELERY_QUEUES = {
     }
 }
 
+REST_USE_JWT = True
+
+
 try:
     from settings_local import *
 except:
