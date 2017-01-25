@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     #third party
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_gis',
     'django_filters',
     'versatileimagefield',
@@ -64,6 +65,10 @@ INSTALLED_APPS = [
     'constance',
     'constance.backends.database',
     'actstream',
+    'rest_auth',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
 
     # private app
     'core',
@@ -282,6 +287,13 @@ CELERY_QUEUES = {
         'binding_key': CELERY_DEFAULT_QUEUE,
     }
 }
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'core.serializers.RegisterSerializer'
+}
+
+REST_USE_JWT = True
+
 
 try:
     from settings_local import *

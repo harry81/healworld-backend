@@ -6,6 +6,9 @@ from django.contrib.gis.measure import D
 
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from rest_auth.registration import serializers as auth_register_serializers
+from allauth.account.adapter import get_adapter
+from django.utils.translation import ugettext_lazy as _
 from actstream import action
 from versatileimagefield.serializers import VersatileImageFieldSerializer
 from core.models import User, Item, Image
@@ -151,3 +154,21 @@ class CommentSerializer(serializers.ModelSerializer):
                 pass
 
         return super(CommentSerializer, self).create(validated_data)
+
+
+class RegisterSerializer(auth_register_serializers.RegisterSerializer):
+    verified_code = serializers.CharField(max_length=10)
+
+    def validate(self, data):
+        if data['verified_code'][0] != '7':
+            raise serializers.ValidationError(_("verified_code is wrong."))
+
+        return super(RegisterSerializer, self).validate(data)
+
+    def save(self, request):
+        adapter = get_adapter()
+        user = adapter.new_user(request)
+        self.cleaned_data = self.get_cleaned_data()
+        adapter.save_user(request, user, self)
+        self.custom_signup(request, user)
+        return user
