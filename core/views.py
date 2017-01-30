@@ -11,6 +11,7 @@ from rest_framework import viewsets, filters, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import list_route, detail_route
+from rest_framework.permissions import AllowAny
 from core.serializers import (ItemSerializer, ImageSerializer,
                               CommentSerializer, ProfileSerializer)
 from rest_framework_gis.filters import DistanceToPointFilter
@@ -67,6 +68,7 @@ class ItemPagination(PageNumberPagination):
 class ItemAPIView(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     pagination_class = ItemPagination
+    permission_classes = (AllowAny,)
 
     distance_filter_field = 'point'
     filter_backends = (DistanceToPointFilter,
@@ -125,6 +127,7 @@ class ItemAPIView(viewsets.ModelViewSet):
 
 class ImageAPIView(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
+    permission_classes = (AllowAny,)
 
     def get_queryset(self):
         return self.get_queryset.order_by('-created_at')

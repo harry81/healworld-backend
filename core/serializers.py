@@ -42,6 +42,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     social_auth = UserSocialAuthForListSerializer(many=True, read_only=True)
+    username = serializers.SerializerMethodField()
+
+    def get_username(self, obj):
+        if obj.username == 'anonymous':
+            return obj.phone[-4:]
+        return obj.username
 
     class Meta:
         model = User
@@ -50,6 +56,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
+
     itemshot = VersatileImageFieldSerializer(
         sizes=[
             ('full_size', 'url'),
