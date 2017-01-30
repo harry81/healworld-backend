@@ -108,6 +108,8 @@ class Item(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=256, blank=True, null=True)
     state = FSMField(default='created', protected=True)
+    phone = models.CharField(max_length=32, blank=True,
+                             null=True, default=None)
     deleted = models.BooleanField(default=False)
     objects = models.Manager()
     live_objects = ItemManager()
