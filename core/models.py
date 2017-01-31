@@ -52,7 +52,7 @@ class User(AbstractUser):
         image_url = '/assets/imgs/person.png'
 
         if (self.profile_picture.name == '') or\
-           (self.profile_picture is None):
+           (self.profile_picture.name is None):
             if self.social_auth.all().exists():
                 social = self.social_auth.all()[0]
 
