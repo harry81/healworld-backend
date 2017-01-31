@@ -51,7 +51,8 @@ class User(AbstractUser):
     def update_picture_url(self):
         image_url = '/assets/imgs/person.png'
 
-        if self.profile_picture.name == '':
+        if (self.profile_picture.name == '') or\
+           (self.profile_picture is None):
             if self.social_auth.all().exists():
                 social = self.social_auth.all()[0]
 
