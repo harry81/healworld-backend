@@ -234,13 +234,14 @@ CORS_ORIGIN_WHITELIST = (
     'healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
     'www.healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
     'healworld.co.kr',
+    'backend.healworld.co.kr',
     'www.healworld.co.kr',
     'localhost:8100',
-    'healworld:8100',
+    'localhost',
     '127.0.0.1:8100'
 )
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = CORS_ORIGIN_WHITELIST
 
 REST_FRAMEWORK = {
      'DEFAULT_PERMISSION_CLASSES': (
