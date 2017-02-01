@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
+    'rest_framework_tracking',
 
     # private app
     'core',
