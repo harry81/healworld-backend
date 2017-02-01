@@ -69,6 +69,8 @@ class ItemAPIView(LoggingMixin, viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     pagination_class = ItemPagination
 
+    logging_methods = ['GET']
+
     distance_filter_field = 'point'
     filter_backends = (DistanceToPointFilter,
                        filters.SearchFilter, DjangoFilterBackend)
