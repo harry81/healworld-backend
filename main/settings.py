@@ -239,6 +239,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     'healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
     'www.healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
+    # load balancer
+    'awseb-e-p-awsebloa-18c4p4bwy68ry-593611381.ap-northeast-2.elb.amazonaws.com',
     'healworld.co.kr',
     'backend.healworld.co.kr',
     'www.healworld.co.kr',
