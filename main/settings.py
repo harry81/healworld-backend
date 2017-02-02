@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import datetime
 import urllib
+import re
+import djcelery
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,7 +29,7 @@ SECRET_KEY = '_xnb+ht0%h1mk188cuyn@7a6p63iki+7sbg(zn%1_@l00or%7o'
 # SECURITY WARNING: don't run with debug turned on in production!
 ISAWS = os.getenv('ISAWS', False)
 DEBUG = False if ISAWS else True
-SESSION_COOKIE_DOMAIN="localhost" if DEBUG else '.healworld.co.kr'
+SESSION_COOKIE_DOMAIN = "localhost" if DEBUG else '.healworld.co.kr'
 
 ADMINS = (
     ('pointer', 'chharry@gmail.com'),
@@ -47,7 +49,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django.contrib.gis',
 
-    #third party
+    # third party
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_gis',
@@ -215,7 +217,7 @@ AUTH_USER_MODEL = 'core.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT= os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -228,6 +230,10 @@ AWS_S3_HOST = 's3.ap-northeast-2.amazonaws.com'
 AWS_QUERYSTRING_AUTH = False
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+IGNORABLE_404_URLS = [
+    re.compile(r'^/favicon.ico'),
+]
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
@@ -244,7 +250,7 @@ CORS_ORIGIN_WHITELIST = (
 ALLOWED_HOSTS = CORS_ORIGIN_WHITELIST
 
 REST_FRAMEWORK = {
-     'DEFAULT_PERMISSION_CLASSES': (
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -299,13 +305,12 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 REST_USE_JWT = True
 
-
 try:
     from settings_local import *
 except:
     pass
 
-### ACTSTREAM
+# ACTSTREAM
 ACTSTREAM_SETTINGS = {
     'FETCH_RELATIONS': True,
     'USE_PREFETCH': True,
@@ -313,12 +318,11 @@ ACTSTREAM_SETTINGS = {
     'GFK_FETCH_DEPTH': 1,
 }
 
-### CELERY
-import djcelery
+# CELERY
 djcelery.setup_loader()
 
 
-### CONSTANCE
+# CONSTANCE
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'SEND_TEXT': (True, 'Send text message or not'),
@@ -342,7 +346,7 @@ LOGGING = {
     },
     'handlers': {
         'sentry': {
-            'level': 'WARNING', # To capture more than ERROR, change to WARNING, INFO, etc.
+            'level': 'WARNING',
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
             'tags': {'custom-tag': 'x'},
         },
