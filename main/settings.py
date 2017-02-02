@@ -305,11 +305,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 REST_USE_JWT = True
 
-try:
-    from settings_local import *
-except:
-    pass
-
 # ACTSTREAM
 ACTSTREAM_SETTINGS = {
     'FETCH_RELATIONS': True,
@@ -374,3 +369,8 @@ LOGGING = {
         },
     },
 }
+
+try:
+    from settings_local import *
+except:
+    pass
