@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import requests
 import json
+import datetime
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -106,7 +107,7 @@ class Item(models.Model):
     grade = models.IntegerField(default=3)
     point = models.PointField(verbose_name=_("Item location"),
                               blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=datetime.datetime.now)
     address = models.CharField(max_length=256, blank=True, null=True)
     state = FSMField(default='created', protected=True)
     deleted = models.BooleanField(default=False)
