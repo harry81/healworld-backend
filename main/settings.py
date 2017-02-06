@@ -328,6 +328,9 @@ CONSTANCE_CONFIG = {
 }
 
 
+LOG_DIR = "/var/log/app_logs"
+DEBUG_LOG_DIR = LOG_DIR + "/django_debug.log"
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -340,10 +343,22 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s '
                       '%(process)d %(thread)d %(message)s'
         },
+        'standard': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
     },
     'handlers': {
         'null': {
             'class': 'logging.NullHandler',
+        },
+        'log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': DEBUG_LOG_DIR,
+            'maxBytes': 50000,
+            'backupCount': 2,
+            'formatter': 'standard',
         },
         'sentry': {
             'level': 'WARNING',
@@ -374,7 +389,7 @@ LOGGING = {
         },
         'sentry.errors': {
             'level': 'DEBUG',
-            'handlers': ['console'],
+            'handlers': ['console', 'log_file'],
             'propagate': False,
         },
     },
