@@ -69,8 +69,6 @@ class ItemAPIView(LoggingMixin, viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     pagination_class = ItemPagination
 
-    logging_methods = ['GET']
-
     distance_filter_field = 'point'
     filter_backends = (DistanceToPointFilter,
                        filters.SearchFilter, DjangoFilterBackend)
@@ -126,7 +124,7 @@ class ItemAPIView(LoggingMixin, viewsets.ModelViewSet):
         return Response(ret, status=status.HTTP_200_OK)
 
 
-class ImageAPIView(viewsets.ModelViewSet):
+class ImageAPIView(LoggingMixin, viewsets.ModelViewSet):
     serializer_class = ImageSerializer
 
     def get_queryset(self):

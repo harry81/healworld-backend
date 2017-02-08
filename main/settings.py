@@ -389,7 +389,7 @@ LOGGING = {
         },
         'sentry.errors': {
             'level': 'DEBUG',
-            'handlers': ['console', 'log_file'],
+            'handlers': ['console'],
             'propagate': False,
         },
     },
