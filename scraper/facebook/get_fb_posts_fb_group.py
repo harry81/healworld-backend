@@ -5,6 +5,8 @@ import json
 import datetime
 import csv
 import time
+from dateutil.parser import parse
+from scraper.models import Item
 
 
 def request_until_succeed(url):
@@ -46,7 +48,6 @@ def getFacebookPageFeedData(group_id, access_token, num_statuses):
     url = base + node + fields + parameters
 
     # retrieve data
-    import ipdb; ipdb.set_trace()
     data = json.loads(request_until_succeed(url))
 
     return data
@@ -73,6 +74,33 @@ def getReactionsForStatus(status_id, access_token):
     data = json.loads(request_until_succeed(url))
 
     return data
+
+
+def saveFacebookPageFeedStatus(status):
+    if status['type'] in ['link', 'status']:
+        return
+
+    try:
+        item = {
+            'item_id': status['id'],
+            'from_id': status['from']['id'],
+            'from_name': status['from']['name'],
+            'name': status['name'],
+            'item_type': status['type'],
+            'link': status['link'],
+            'message': status['message'],
+            'created_at': parse(status['created_time'])
+        }
+    except Exception as e:
+        print e
+        print "[%s] doesn't saved [%s]" % (status['type'], e)
+        return
+
+    try:
+        Item.objects.create(**item)
+        print "%s[%s] saved" % (item['name'], item['item_type'])
+    except Exception as e:
+        print "%s - [%s] doesn't saved" % (e, status['type'])
 
 
 def processFacebookPageFeedStatus(status, access_token):
@@ -164,15 +192,12 @@ def scrapeFacebookPageFeedStatus(group_id, access_token):
                 (group_id, scrape_starttime)
 
         statuses = getFacebookPageFeedData(group_id, access_token, 100)
-        import ipdb; ipdb.set_trace()
 
         while has_next_page:
             for status in statuses['data']:
                 # Ensure it is a status with the expected metadata
-                print status
                 if 'reactions' in status:
-                    w.writerow(processFacebookPageFeedStatus(status, \
-                                                             access_token))
+                    saveFacebookPageFeedStatus(status)
 
                 # output progress occasionally to make sure code is not
                 # stalling
