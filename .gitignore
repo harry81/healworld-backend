@@ -99,3 +99,4 @@ main/settings_local.py
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 /.dir-locals.el
+/TAGS

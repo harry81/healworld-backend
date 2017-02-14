@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
 
     # private app
+    'scraper',
     'core',
 ]
 
