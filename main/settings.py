@@ -317,7 +317,7 @@ ACTSTREAM_SETTINGS = {
 
 # CELERY
 djcelery.setup_loader()
-
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
 # CONSTANCE
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
