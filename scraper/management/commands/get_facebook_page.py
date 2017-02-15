@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.core.management.base import BaseCommand
 from scraper.facebook.get_fb_posts_fb_group import scrapeFacebookPageFeedStatus
 from django.conf import settings

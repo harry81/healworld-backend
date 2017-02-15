@@ -13,6 +13,7 @@ class Item(models.Model):
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     scraped_at = models.DateTimeField(auto_now_add=True)
+    core_item_id = models.CharField(max_length=64, blank=True, null=True)
 
     def __unicode__(self):
         return u'%s' % (self.name)

@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 # ref : https://github.com/minimaxir/facebook-page-post-scraper
+import requests
+import json
 import urllib2
 import json
 import re
 import datetime
 import csv
 import time
+from urlparse import urlparse
 from dateutil.parser import parse
 from scraper.models import Item
+from django.core.files import File
 
 
 def request_until_succeed(url):
@@ -45,7 +49,7 @@ def getFacebookPageFeedData(group_id, access_token, num_statuses):
     fields = "/?fields=message,link,created_time,type,name,id," + \
              "comments.limit(0).summary(true),shares,reactions." + \
              "limit(0).summary(true),from"
-    parameters = "&limit=%s&since=yesterday&access_token=%s" % (num_statuses, access_token)
+    parameters = "&limit=%s&since=3+months+ago&access_token=%s" % (num_statuses, access_token)
     url = base + node + fields + parameters
 
     # retrieve data
@@ -106,6 +110,43 @@ def saveFacebookPageFeedStatus(status):
         print "%s[%s] saved" % (item['name'], item['item_type'])
     except Exception as e:
         print "%s - [%s] doesn't saved" % (e, status['type'])
+
+
+def copyStatusToCore():
+    from core.models import Item as CoreItem, Image
+    access_token = "221879398254081|b0d2caec244b2844071eaebc6a252b76"
+
+    for sc_item in Item.objects.all():
+        # save image
+        image_list_url = "https://graph.facebook.com/v2.8/%s?fields=images&access_token=%s" %\
+                         (sc_item.fb_id, access_token)
+        image_list = requests.get(image_list_url)
+        image_list_dict = json.loads(image_list.content)
+        image_url = sorted(image_list_dict['images'])[3]
+
+        img = requests.get(image_url['source'])
+
+        filename = urlparse(image_url['source']).path.rsplit('/')[-1]
+        print "%s - %s" % (image_url['source'], filename)
+    
+        with open('/tmp/%s' % filename, 'wb') as fp:
+            for chunk in img.iter_content(1024):
+                fp.write(chunk)
+
+        image = Image()
+        image.itemshot.save(filename,
+                            File(open('/tmp/%s' % filename)))
+
+        # save item with #image and #item
+        item_dict = {
+            "title": sc_item.from_name,
+            "user_id": 1,
+            "memo": sc_item.message,
+        }
+
+        core_item = CoreItem.objects.create(**item_dict)
+        image.item = core_item
+        image.save()
 
 
 def processFacebookPageFeedStatus(status, access_token):
