@@ -2,6 +2,7 @@
 # ref : https://github.com/minimaxir/facebook-page-post-scraper
 import urllib2
 import json
+import re
 import datetime
 import csv
 import time
@@ -81,6 +82,9 @@ def saveFacebookPageFeedStatus(status):
         return
 
     try:
+        link = status['link']
+        fb_id = re.findall('fbid=([0-9]+)', link)[0]
+
         item = {
             'item_id': status['id'],
             'from_id': status['from']['id'],
@@ -88,6 +92,7 @@ def saveFacebookPageFeedStatus(status):
             'name': status['name'],
             'item_type': status['type'],
             'link': status['link'],
+            'fb_id': fb_id,
             'message': status['message'],
             'created_at': parse(status['created_time'])
         }
