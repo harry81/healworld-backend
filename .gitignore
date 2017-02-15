@@ -100,3 +100,4 @@ main/settings_local.py
 !.elasticbeanstalk/*.global.yml
 /.dir-locals.el
 /TAGS
+/celerybeat.pid

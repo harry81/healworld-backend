@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import datetime
-import raven
 import urllib
+import re
+import djcelery
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,7 +29,7 @@ SECRET_KEY = '_xnb+ht0%h1mk188cuyn@7a6p63iki+7sbg(zn%1_@l00or%7o'
 # SECURITY WARNING: don't run with debug turned on in production!
 ISAWS = os.getenv('ISAWS', False)
 DEBUG = False if ISAWS else True
-SESSION_COOKIE_DOMAIN="localhost" if DEBUG else '.healworld.co.kr'
+SESSION_COOKIE_DOMAIN = "localhost" if DEBUG else '.healworld.co.kr'
 
 ADMINS = (
     ('pointer', 'chharry@gmail.com'),
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django.contrib.gis',
 
-    #third party
+    # third party
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_gis',
@@ -69,6 +70,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
+    'rest_framework_tracking',
 
     # private app
     'scraper',
@@ -76,6 +78,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = [
+    'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
+    'raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -215,7 +219,7 @@ AUTH_USER_MODEL = 'core.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT= os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -229,21 +233,28 @@ AWS_QUERYSTRING_AUTH = False
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+IGNORABLE_404_URLS = [
+    re.compile(r'^/favicon.ico'),
+]
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     'healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
     'www.healworld.co.kr.s3-website.ap-northeast-2.amazonaws.com',
+    # load balancer
+    'awseb-e-p-awsebloa-18c4p4bwy68ry-593611381.ap-northeast-2.elb.amazonaws.com',
     'healworld.co.kr',
+    'backend.healworld.co.kr',
     'www.healworld.co.kr',
     'localhost:8100',
-    'healworld:8100',
+    'localhost',
     '127.0.0.1:8100'
 )
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = CORS_ORIGIN_WHITELIST
 
 REST_FRAMEWORK = {
-     'DEFAULT_PERMISSION_CLASSES': (
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -298,13 +309,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 REST_USE_JWT = True
 
-
-try:
-    from settings_local import *
-except:
-    pass
-
-### ACTSTREAM
+# ACTSTREAM
 ACTSTREAM_SETTINGS = {
     'FETCH_RELATIONS': True,
     'USE_PREFETCH': True,
@@ -312,15 +317,79 @@ ACTSTREAM_SETTINGS = {
     'GFK_FETCH_DEPTH': 1,
 }
 
-### CELERY
-import djcelery
+# CELERY
 djcelery.setup_loader()
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
-
-### CONSTANCE
+# CONSTANCE
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'SEND_TEXT': (True, 'Send text message or not'),
     'SECONDS_TO_SEND_TEXT': (60, 'Seconds to send text message'),
     'NOTIFICATION_HOW_LONG': (60, 'When the user is notified')
 }
+
+
+LOG_DIR = "/var/log/app_logs"
+DEBUG_LOG_DIR = LOG_DIR + "/django_debug.log"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['sentry'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s '
+                      '%(process)d %(thread)d %(message)s'
+        },
+        'standard': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'null': {
+            'class': 'logging.NullHandler',
+        },
+        'sentry': {
+            'level': 'WARNING',
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            'tags': {'custom-tag': 'x'},
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
+        },
+
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'raven': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    },
+}
+
+try:
+    from settings_local import *
+except:
+    pass

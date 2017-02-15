@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
 from main.celery_app import app as celery_app
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from core.sendsms import send_text
 from constance import config
 from actstream import action
-from .utils import get_short_url
+from celery.utils.log import get_task_logger
+from .utils import get_short_url, get_reports
+logger = get_task_logger(__name__)
 
 
 # @celery_app.task(bind=True)
@@ -62,3 +64,36 @@ def send_text_healworld(self, item, comment):
                 message=message,
                 result=result)
     return result
+
+
+@celery_app.task(bind=True)
+def send_reports(self):
+    report = get_reports()
+    message = ""
+
+    for k, v in report.items():
+        message = message + "%s : %s<br>" % (k, v)
+
+    msg = EmailMessage(
+        u"daily report",
+        message,
+        'noreply@mail.healworld.co.kr',
+        ['chharry@gmail.com', ]
+    )
+    msg.content_subtype = "html"
+    msg.send()
+
+
+@celery_app.task(bind=True)
+def test_send_mail(self):
+    title = "test_send_mail"
+    message = "test"
+
+    send_mail(
+        title,
+        message,
+        'noreply@mail.healworld.co.kr',
+        ['chharry@gmail.com', ],
+        fail_silently=False,
+    )
+    logger.info("Start task")

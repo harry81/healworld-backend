@@ -52,7 +52,9 @@ class ItemAdmin(FSMTransitionMixin, admin.ModelAdmin):
     inlines = (ImageInline, )
     list_display = ("image_tag", "user", 'state', "title",
                     "memo", "address", "created_at")
-    fields = ("title", "memo", "user", "price", 'deleted', 'state', 'grade')
+    fields = ("title", "memo", "user", "price", 'deleted',
+              'state', 'grade', 'created_at')
+    readonly_fields = ("state", )
     list_filter = ('state', 'deleted')
     fsm_field = ['state', ]
     actions = [mark_deleted]
@@ -69,10 +71,12 @@ class ItemAdmin(FSMTransitionMixin, admin.ModelAdmin):
     image_tag.short_description = 'Image'
     image_tag.allow_tags = True
 
+
 admin.site.register(Item, ItemAdmin)
 
 
 class ImageAdmin(admin.ModelAdmin):
     pass
+
 
 admin.site.register(Image, ImageAdmin)

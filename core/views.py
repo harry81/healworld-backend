@@ -15,6 +15,7 @@ from core.serializers import (ItemSerializer, ImageSerializer,
                               CommentSerializer, ProfileSerializer)
 from rest_framework_gis.filters import DistanceToPointFilter
 from rest_framework_jwt.settings import api_settings
+from rest_framework_tracking.mixins import LoggingMixin
 from core.models import Item, User
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -64,7 +65,7 @@ class ItemPagination(PageNumberPagination):
     page_size = 10
 
 
-class ItemAPIView(viewsets.ModelViewSet):
+class ItemAPIView(LoggingMixin, viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     pagination_class = ItemPagination
 
@@ -123,7 +124,7 @@ class ItemAPIView(viewsets.ModelViewSet):
         return Response(ret, status=status.HTTP_200_OK)
 
 
-class ImageAPIView(viewsets.ModelViewSet):
+class ImageAPIView(LoggingMixin, viewsets.ModelViewSet):
     serializer_class = ImageSerializer
 
     def get_queryset(self):
