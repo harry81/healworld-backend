@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+import unittest
 from django.test import TestCase
 from django_dynamic_fixture import G
 from core.models import User, Item
 from django_comments.models import Comment
-from .utils import get_short_url
+from .utils import get_short_url, get_reports
 from django.test import Client
 
 
@@ -19,9 +21,12 @@ class CoreTests(TestCase):
 
         self.item = G(Item, user=self.user1, ignore_fields=['state', ])
 
+    def test_get_report(self):
+        report = get_reports()
+        self.assertIn('total', report)
+
     def test_comment(self):
         self.client.force_login(self.user1)
-        import ipdb; ipdb.set_trace()
         response = self.client.post('/api-comment/', {
             "comment": "h4llo",
             "content_type": 8,
@@ -32,6 +37,7 @@ class CoreTests(TestCase):
         })
         self.assertEqual(response.status_code, 201)
 
+    @unittest.skip("skip the test")
     def test_short_url(self):
         short_url = get_short_url('hi')
         self.assertIn('me2', short_url)
