@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 
-class Item(models.Model):
+class ScraperItem(models.Model):
     item_id = models.CharField(max_length=64, unique=True)
     from_id = models.CharField(max_length=64, blank=True, null=True)
     fb_id = models.CharField(max_length=64, blank=True, null=True)

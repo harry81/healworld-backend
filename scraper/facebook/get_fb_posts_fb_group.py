@@ -3,14 +3,14 @@
 import requests
 import json
 import urllib2
-import json
 import re
 import datetime
 import csv
 import time
+from django.conf import settings
 from urlparse import urlparse
 from dateutil.parser import parse
-from scraper.models import Item
+from scraper.models import ScraperItem
 from django.core.files import File
 
 
@@ -43,7 +43,7 @@ def getFacebookPageFeedData(group_id, access_token, num_statuses):
 
     # Construct the URL string; see
     # http://stackoverflow.com/a/37239851 for Reactions parameters
-    base = "https://graph.facebook.com/v2.6"
+    base = "https://graph.facebook.com/v2.8"
     node = "/%s/feed" % group_id
 
     fields = "/?fields=message,link,created_time,type,name,id," + \
@@ -58,7 +58,10 @@ def getFacebookPageFeedData(group_id, access_token, num_statuses):
     return data
 
 
-def getReactionsForStatus(status_id, access_token):
+def getReactionsForStatus(status_id):
+    access_token = "%s|%s" % (
+        settings.SOCIAL_AUTH_FACEBOOK_KEY,
+        settings.SOCIAL_AUTH_FACEBOOK_SECRET)
 
     # See http://stackoverflow.com/a/37239851 for Reactions parameters
         # Reactions are only accessable at a single-post endpoint
@@ -106,29 +109,38 @@ def saveFacebookPageFeedStatus(status):
         return
 
     try:
-        Item.objects.create(**item)
+        ScraperItem.objects.create(**item)
         print "%s[%s] saved" % (item['name'], item['item_type'])
     except Exception as e:
         print "%s - [%s] doesn't saved" % (e, status['type'])
 
 
 def copyStatusToCore():
-    from core.models import Item as CoreItem, Image
-    access_token = "221879398254081|b0d2caec244b2844071eaebc6a252b76"
+    from core.models import Image, User, Item
 
-    for sc_item in Item.objects.all():
+    access_token = "%s|%s" % (
+        settings.SOCIAL_AUTH_FACEBOOK_KEY,
+        settings.SOCIAL_AUTH_FACEBOOK_SECRET)
+
+    for sc_item in ScraperItem.objects.all():
+        if Item.objects.filter(link=sc_item.link).exists():
+            continue
+
         # save image
         image_list_url = "https://graph.facebook.com/v2.8/%s?fields=images&access_token=%s" %\
                          (sc_item.fb_id, access_token)
         image_list = requests.get(image_list_url)
+        if not image_list.ok:
+            continue
+
         image_list_dict = json.loads(image_list.content)
         image_url = sorted(image_list_dict['images'])[3]
 
         img = requests.get(image_url['source'])
-
         filename = urlparse(image_url['source']).path.rsplit('/')[-1]
+
         print "%s - %s" % (image_url['source'], filename)
-    
+
         with open('/tmp/%s' % filename, 'wb') as fp:
             for chunk in img.iter_content(1024):
                 fp.write(chunk)
@@ -138,13 +150,15 @@ def copyStatusToCore():
                             File(open('/tmp/%s' % filename)))
 
         # save item with #image and #item
+        facebookuser = User.objects.get(username='Facebook')
         item_dict = {
             "title": sc_item.from_name,
-            "user_id": 1,
+            "user": facebookuser,
             "memo": sc_item.message,
+            "link": sc_item.link,
         }
 
-        core_item = CoreItem.objects.create(**item_dict)
+        core_item = Item.objects.create(**item_dict)
         image.item = core_item
         image.save()
 
@@ -222,46 +236,37 @@ def processFacebookPageFeedStatus(status, access_token):
 
 
 def scrapeFacebookPageFeedStatus(group_id, access_token):
-    with open('%s_facebook_statuses.csv' % group_id, 'wb') as file:
-        w = csv.writer(file)
-        w.writerow(["status_id", "status_message", "status_author",
-            "link_name", "status_type", "status_link",
-            "status_published", "num_reactions", "num_comments",
-            "num_shares", "num_likes", "num_loves", "num_wows",
-            "num_hahas", "num_sads", "num_angrys"])
+    has_next_page = True
+    num_processed = 0   # keep a count on how many we've processed
+    scrape_starttime = datetime.datetime.now()
 
-        has_next_page = True
-        num_processed = 0   # keep a count on how many we've processed
-        scrape_starttime = datetime.datetime.now()
+    print "Scraping %s Facebook Page: %s\n" % \
+        (group_id, scrape_starttime)
 
-        print "Scraping %s Facebook Page: %s\n" % \
-                (group_id, scrape_starttime)
+    statuses = getFacebookPageFeedData(group_id, access_token, 100)
 
-        statuses = getFacebookPageFeedData(group_id, access_token, 100)
+    while has_next_page:
+        for status in statuses['data']:
+            # Ensure it is a status with the expected metadata
+            if 'reactions' in status:
+                saveFacebookPageFeedStatus(status)
 
-        while has_next_page:
-            for status in statuses['data']:
-                # Ensure it is a status with the expected metadata
-                if 'reactions' in status:
-                    saveFacebookPageFeedStatus(status)
+            # output progress occasionally to make sure code is not
+            # stalling
+            num_processed += 1
+            if num_processed % 100 == 0:
+                print "%s Statuses Processed: %s" % (
+                    num_processed, datetime.datetime.now())
 
-                # output progress occasionally to make sure code is not
-                # stalling
-                num_processed += 1
-                if num_processed % 100 == 0:
-                    print "%s Statuses Processed: %s" % (num_processed, 
-                            datetime.datetime.now())
+        # if there is no next page, we're done.
+        if 'paging' in statuses.keys():
+            statuses = json.loads(request_until_succeed(
+                statuses['paging']['next']))
+        else:
+            has_next_page = False
 
-            # if there is no next page, we're done.
-            if 'paging' in statuses.keys():
-                statuses = json.loads(request_until_succeed(\
-                        statuses['paging']['next']))
-            else:
-                has_next_page = False
-
-
-        print "\nDone!\n%s Statuses Processed in %s" % \
-                (num_processed, datetime.datetime.now() - scrape_starttime)
+    print "\nDone!\n%s Statuses Processed in %s" % \
+        (num_processed, datetime.datetime.now() - scrape_starttime)
 
 
 # The CSV can be opened in all major statistical programs. Have fun! :)

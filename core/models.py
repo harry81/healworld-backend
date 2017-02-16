@@ -103,7 +103,7 @@ class Item(models.Model):
     title = models.CharField(max_length=512, blank=True, null=True)
     memo = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=None, null=True)
-    price = models.IntegerField(default=1000)
+    price = models.IntegerField(default=None, null=True)
     grade = models.IntegerField(default=3)
     point = models.PointField(verbose_name=_("Item location"),
                               blank=True, null=True)
@@ -113,6 +113,7 @@ class Item(models.Model):
     deleted = models.BooleanField(default=False)
     objects = models.Manager()
     live_objects = ItemManager()
+    link = models.CharField(max_length=256, blank=True, null=True)
 
     def __unicode__(self):
         return u'%s' % (self.title)

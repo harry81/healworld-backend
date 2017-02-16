@@ -53,8 +53,8 @@ class ItemAdmin(FSMTransitionMixin, admin.ModelAdmin):
     list_display = ("image_tag", "user", 'state', "title",
                     "memo", "address", "created_at")
     fields = ("title", "memo", "user", "price", 'deleted',
-              'state', 'grade', 'created_at')
-    readonly_fields = ("state", )
+              'state', 'grade', 'created_at', 'link')
+    readonly_fields = ("state", 'link')
     list_filter = ('state', 'deleted')
     fsm_field = ['state', ]
     actions = [mark_deleted]

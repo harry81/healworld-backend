@@ -7,6 +7,11 @@ from constance import config
 from actstream import action
 from celery.utils.log import get_task_logger
 from .utils import get_short_url, get_reports
+from django.conf import settings
+from scraper.facebook.get_fb_posts_fb_group import (
+    scrapeFacebookPageFeedStatus,
+    copyStatusToCore)
+
 logger = get_task_logger(__name__)
 
 
@@ -64,6 +69,20 @@ def send_text_healworld(self, item, comment):
                 message=message,
                 result=result)
     return result
+
+
+@celery_app.task(bind=True)
+def scrap_facebook(self):
+    access_token = "%s|%s" % (
+        settings.SOCIAL_AUTH_FACEBOOK_KEY,
+        settings.SOCIAL_AUTH_FACEBOOK_SECRET)
+
+    scrapeFacebookPageFeedStatus('206291902739080', access_token)
+
+
+@celery_app.task(bind=True)
+def copy_scraped_facebook(self):
+    copyStatusToCore()
 
 
 @celery_app.task(bind=True)
