@@ -3,9 +3,15 @@ import unittest
 from django.test import TestCase
 from django_dynamic_fixture import G
 from core.models import User, Item
-from django_comments.models import Comment
 from .utils import get_short_url, get_reports
 from django.test import Client
+from core.tasks import scrap_facebook
+
+
+class AsyncTestCase(TestCase):
+    def test_scrap_facebook_task(self):
+        ret = scrap_facebook.delay(group_ids=['206291902739080'])
+        self.assertTrue(ret.successful())
 
 
 class CoreTests(TestCase):

@@ -7,7 +7,6 @@ from constance import config
 from actstream import action
 from celery.utils.log import get_task_logger
 from .utils import get_short_url, get_reports
-from django.conf import settings
 from scraper.facebook.get_fb_posts_fb_group import (
     scrapeFacebookPageFeedStatus,
     copyStatusToCore)
@@ -15,17 +14,17 @@ from scraper.facebook.get_fb_posts_fb_group import (
 logger = get_task_logger(__name__)
 
 
-# @celery_app.task(bind=True)
-# def send_email_healworld(self, item_title, comment):
+@celery_app.task(bind=True)
+def scrap_facebook(self,  **kwargs):
+    for group_id in kwargs['group_ids']:
+        scrapeFacebookPageFeedStatus(group_id)
 
-#     send_mail(
-#         u'[Healworld] 댓글입니다 %s' % item_title,
-#         comment,
-#         'noreply@mail.healworld.co.kr',
-#         ['chharry@gmail.com',],
-#         # [item.user.email],
-#         fail_silently=False,
-#     )
+    # TODO : send report email
+
+
+@celery_app.task(bind=True)
+def copy_scraped_facebook(self):
+    copyStatusToCore()
 
 
 @celery_app.task(bind=True)
@@ -69,20 +68,6 @@ def send_text_healworld(self, item, comment):
                 message=message,
                 result=result)
     return result
-
-
-@celery_app.task(bind=True)
-def scrap_facebook(self):
-    access_token = "%s|%s" % (
-        settings.SOCIAL_AUTH_FACEBOOK_KEY,
-        settings.SOCIAL_AUTH_FACEBOOK_SECRET)
-
-    scrapeFacebookPageFeedStatus('206291902739080', access_token)
-
-
-@celery_app.task(bind=True)
-def copy_scraped_facebook(self):
-    copyStatusToCore()
 
 
 @celery_app.task(bind=True)

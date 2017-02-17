@@ -4,6 +4,9 @@ except:
     pass
 
 
+CELERY_ALWAYS_EAGER = True
+TEST_RUNNER = 'core.test_runner.TestRunner'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',

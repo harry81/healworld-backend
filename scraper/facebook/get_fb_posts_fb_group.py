@@ -5,13 +5,16 @@ import json
 import urllib2
 import re
 import datetime
-import csv
 import time
 from django.conf import settings
 from urlparse import urlparse
 from dateutil.parser import parse
 from scraper.models import ScraperItem
 from django.core.files import File
+
+access_token = "%s|%s" % (
+    settings.SOCIAL_AUTH_FACEBOOK_KEY,
+    settings.SOCIAL_AUTH_FACEBOOK_SECRET)
 
 
 def request_until_succeed(url):
@@ -235,7 +238,7 @@ def processFacebookPageFeedStatus(status, access_token):
             num_angrys)
 
 
-def scrapeFacebookPageFeedStatus(group_id, access_token):
+def scrapeFacebookPageFeedStatus(group_id):
     has_next_page = True
     num_processed = 0   # keep a count on how many we've processed
     scrape_starttime = datetime.datetime.now()
