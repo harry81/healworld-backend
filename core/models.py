@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import requests
 import json
+import datetime
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -102,16 +103,17 @@ class Item(models.Model):
     title = models.CharField(max_length=512, blank=True, null=True)
     memo = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, default=None, null=True)
-    price = models.IntegerField(default=1000)
+    price = models.IntegerField(default=None, null=True)
     grade = models.IntegerField(default=3)
     point = models.PointField(verbose_name=_("Item location"),
                               blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=datetime.datetime.now)
     address = models.CharField(max_length=256, blank=True, null=True)
     state = FSMField(default='created', protected=True)
     deleted = models.BooleanField(default=False)
     objects = models.Manager()
     live_objects = ItemManager()
+    link = models.CharField(max_length=256, blank=True, null=True)
 
     def __unicode__(self):
         return u'%s' % (self.title)
@@ -169,18 +171,9 @@ def send_notification(sender, instance, created, **kwargs):
         return
 
     comment = instance
-
-    item = comment.content_type.get_all_objects_for_this_type().get(
-        id=comment.object_pk)
-    users = item.get_comment_users()
-
-    for user in User.objects.filter(id__in=users).exclude(id=comment.user.id):
-        user.send_push_notification()
+    item = Item.objects.get(id=comment.object_pk)
 
     eta = time_to_send_text()
-
-    item = comment.content_type.get_all_objects_for_this_type().get(
-        id=comment.object_pk)
 
     # send_email_healworld.apply_async((comment,), eta=eta)
     send_text_healworld.apply_async((item, comment,), eta=eta)
