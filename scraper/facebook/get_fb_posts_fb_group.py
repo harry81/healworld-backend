@@ -52,7 +52,7 @@ def getFacebookPageFeedData(group_id, access_token, num_statuses):
     fields = "/?fields=message,link,created_time,type,name,id," + \
              "comments.limit(0).summary(true),shares,reactions." + \
              "limit(0).summary(true),from"
-    parameters = "&limit=%s&since=3+months+ago&access_token=%s" % (num_statuses, access_token)
+    parameters = "&limit=%s&since=yesterday&access_token=%s" % (num_statuses, access_token)
     url = base + node + fields + parameters
 
     # retrieve data
