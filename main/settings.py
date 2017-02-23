@@ -280,10 +280,9 @@ BROKER_TRANSPORT_OPTIONS = {
     'region': 'ap-northeast-2',
     'polling_interval': 5,
     'queue_name_prefix': 'healworld-live-',
-    'CELERY_SEND_TASK_ERROR_EMAILS': True,
     'visibility_timeout': 3600,
 }
-CELERY_SEND_TASK_ERROR_EMAILS = True
+#CELERY_SEND_TASK_ERROR_EMAILS = True
 
 
 BROKER_TRANSPORT = 'sqs'
