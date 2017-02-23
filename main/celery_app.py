@@ -28,6 +28,7 @@ class Celery(celery.Celery):
 
 app = Celery(
     'healworld_worker', broker=settings.BROKER_URL, include=INCLUDED_TASKS)
+app.config_from_object('django.conf:settings')
 
 # Using a string here means the worker will not have to
 # pickle the object when using Windows.
